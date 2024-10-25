@@ -1,22 +1,10 @@
-# 8-dynamics
+# 8 Dynamics mini-site
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
+This website is created for All We Can Save, to allow anyone interested in engaging with the climate crisis to self-evaluate where they are already strong, and where are the growth opportunities.
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+This site is built with Svelte and SvelteKit. To get started developing, first install the dependencies (`npm install`). Then, whenever you want to start a development server run:
 
 ```bash
 npm run dev
@@ -27,7 +15,7 @@ npm run dev -- --open
 
 ## Building
 
-To create a production version of your app:
+To create a production version of the app:
 
 ```bash
 npm run build
