@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	export let data;
+	let { data } = $props();
 
-	let form: HTMLFormElement;
 	interface Section {
 		key: string;
 		dynamic: string;
@@ -10,34 +8,36 @@
 		value: number;
 	}
 
-	const sections: Section[] = data.dynamics.map((dynamic, idx) => {
-		return {
-			key: 'ABCDEFGH'[idx],
-			dynamic,
-			el: undefined,
-			value: 3
-		};
-	});
+	const sections: Section[] = $state(
+		data.dynamics.map((dynamic, idx) => {
+			return {
+				key: 'ABCDEFGH'[idx],
+				dynamic,
+				el: undefined,
+				value: 3
+			};
+		})
+	);
 
-	function scrollToSection(idx: number) {
+	function scrollToSection(evt: Event, idx: number) {
+		// supercedes the default a tag link for smooth scrolling if javascript is enabled
+		evt.preventDefault();
 		const { el, key } = sections[idx];
 		if (!el) return;
 		el.scrollIntoView({
 			behavior: 'smooth'
 		});
+		// focus the input in the given section once in view
 		document.getElementById(key)?.focus();
 	}
 
-	function formSubmit(evt: SubmitEvent) {
-		evt.preventDefault();
-		if (!form) return;
-		const formData = new FormData(form);
-		let resultString = '';
-		for (const [letter, number] of formData.entries()) {
-			resultString += `${letter}${number}`;
+	const resultsLink = $derived.by(() => {
+		let link = '/results/';
+		for (const s of sections) {
+			link += `${s.key}${s.value}`;
 		}
-		goto(`/results/${resultString}`);
-	}
+		return link;
+	});
 </script>
 
 <svelte:head>
@@ -57,34 +57,37 @@
 			porttitor, magna ut feugiat suscipit, massa enim congue quam, ultricies tincidunt velit mauris
 			a dui. Pellentesque accumsan felis pellentesque, tempus odio at, venenatis nulla.
 		</p>
-		<button on:click={() => scrollToSection(0)}>Start</button>
+		<a href="#section-0" onclick={(e) => scrollToSection(e, 0)}>Start</a>
 	</section>
-	<form on:submit={formSubmit} bind:this={form}>
-		{#each sections as section, index}
-			<!-- TODO: make this a component -->
-			<section bind:this={section.el}>
-				<label for={section.key}>{index + 1}. {section.dynamic}</label>
-				<input
-					name={section.key}
-					id={section.key}
-					type="range"
-					min="1"
-					max="5"
-					bind:value={section.value}
-				/>
-				<div class="buttons">
-					{#if index > 0}
-						<button type="button" on:click={() => scrollToSection(index - 1)}>Previous</button>
-					{/if}
-					{#if index === sections.length - 1}
-						<button type="submit">Finish</button>
-					{:else}
-						<button type="button" on:click={() => scrollToSection(index + 1)}>Next</button>
-					{/if}
-				</div>
-			</section>
-		{/each}
-	</form>
+
+	{#each sections as section, index}
+		<!-- TODO: make this a component -->
+		<section id={`section-${index}`} bind:this={section.el}>
+			<label for={section.key}>{index + 1}. {section.dynamic}</label>
+			<input
+				name={section.key}
+				id={section.key}
+				type="range"
+				min="1"
+				max="5"
+				bind:value={section.value}
+			/>
+			<div class="buttons">
+				{#if index > 0}
+					<a href={`#section-${index - 1}`} onclick={(e) => scrollToSection(e, index - 1)}>
+						Previous
+					</a>
+				{/if}
+				{#if index === sections.length - 1}
+					<a href={resultsLink}>Finish</a>
+				{:else}
+					<a href={`#section-${index + 1}`} onclick={(e) => scrollToSection(e, index + 1)}>
+						Next
+					</a>
+				{/if}
+			</div>
+		</section>
+	{/each}
 </main>
 
 <style>
