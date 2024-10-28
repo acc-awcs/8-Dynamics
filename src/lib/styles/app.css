@@ -1,0 +1,67 @@
+:root {
+	/* AWCS brand guide colors */
+	--moss: #656b4a;
+	--cream: #fffaf5;
+	--charcoal: #303326;
+	--rust: #cc6600;
+	--mustard: #eda618;
+	--sky: #d8e3e5;
+	--blossom: #f9e4e7;
+
+	/* Some guideline widths - happy to adjust! */
+	--width-large: 900px;
+	--width-small: 450px;
+}
+
+body {
+	/* Replace with brand guide typography */
+	font-family: Arial, Helvetica, sans-serif;
+	color: var(--charcoal);
+	background-color: var(--cream);
+	margin: 0px;
+}
+
+/* Class to visually hide element, but keep it available for screen readers.
+   https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+}
+
+a {
+	color: var(--mustard);
+	font-weight: bold;
+}
+
+.btn {
+	font-weight: bold;
+	text-decoration: none;
+	border-radius: 2rem;
+	padding: 1rem 2rem;
+	transition: background-color 0.1s linear;
+}
+
+.btn.primary {
+	border: 1px solid var(--charcoal);
+	color: var(--charcoal);
+	background-color: var(--mustard);
+}
+
+.btn.primary:hover {
+	background-color: var(--cream);
+}
+
+.btn.secondary {
+	border: 1px solid var(--charcoal);
+	color: var(--charcoal);
+	background-color: var(--cream);
+}
+
+.btn.secondary:hover {
+	background-color: var(--mustard);
+}

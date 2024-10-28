@@ -1,12 +1,8 @@
 <script lang="ts">
-	let { data } = $props();
+	import PromptWithSlider from '$lib/components/PromptWithSlider.svelte';
+	import type { Section } from '$lib/types';
 
-	interface Section {
-		key: string;
-		dynamic: string;
-		el: HTMLElement | undefined;
-		value: number;
-	}
+	let { data } = $props();
 
 	const sections: Section[] = $state(
 		data.dynamics.map((dynamic, idx) => {
@@ -46,46 +42,32 @@
 </svelte:head>
 
 <main>
-	<section>
-		<h1>8 Dynamics of Climate Engagement</h1>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lobortis mi arcu, sed iaculis
-			sapien sodales sit amet. Vestibulum magna urna, laoreet vitae ante et, lobortis laoreet justo.
-			Aliquam erat volutpat. Quisque commodo, ex non bibendum commodo, nulla nisi posuere enim, ut
-			hendrerit tellus tortor sed sem. Maecenas sollicitudin tortor et orci porta pharetra. Sed eget
-			nisi facilisis, ultricies tortor et, accumsan mi. Aenean lobortis et odio vitae mollis. Nullam
-			porttitor, magna ut feugiat suscipit, massa enim congue quam, ultricies tincidunt velit mauris
-			a dui. Pellentesque accumsan felis pellentesque, tempus odio at, venenatis nulla.
-		</p>
-		<a href="#section-0" onclick={(e) => scrollToSection(e, 0)}>Start</a>
+	<section class="intro">
+		<div>
+			<h1>8 Dynamics of Climate Engagement</h1>
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lobortis mi arcu, sed iaculis
+				sapien sodales sit amet. Vestibulum magna urna, laoreet vitae ante et, lobortis laoreet
+				justo. Aliquam erat volutpat. Quisque commodo, ex non bibendum commodo, nulla nisi posuere
+				enim, ut hendrerit tellus tortor sed sem. Maecenas sollicitudin tortor et orci porta
+				pharetra. Sed eget nisi facilisis, ultricies tortor et, accumsan mi. Aenean lobortis et odio
+				vitae mollis. Nullam porttitor, magna ut feugiat suscipit, massa enim congue quam, ultricies
+				tincidunt velit mauris a dui. Pellentesque accumsan felis pellentesque, tempus odio at,
+				venenatis nulla.
+			</p>
+			<a class="btn primary" href="#section-0" onclick={(e) => scrollToSection(e, 0)}>Start</a>
+		</div>
 	</section>
 
 	{#each sections as section, index}
-		<!-- TODO: make this a component -->
 		<section id={`section-${index}`} bind:this={section.el}>
-			<label for={section.key}>{index + 1}. {section.dynamic}</label>
-			<input
-				name={section.key}
-				id={section.key}
-				type="range"
-				min="1"
-				max="5"
+			<PromptWithSlider
 				bind:value={section.value}
+				{section}
+				{index}
+				{scrollToSection}
+				resultsLink={index === sections.length - 1 ? resultsLink : null}
 			/>
-			<div class="buttons">
-				{#if index > 0}
-					<a href={`#section-${index - 1}`} onclick={(e) => scrollToSection(e, index - 1)}>
-						Previous
-					</a>
-				{/if}
-				{#if index === sections.length - 1}
-					<a href={resultsLink}>Finish</a>
-				{:else}
-					<a href={`#section-${index + 1}`} onclick={(e) => scrollToSection(e, index + 1)}>
-						Next
-					</a>
-				{/if}
-			</div>
 		</section>
 	{/each}
 </main>
@@ -98,11 +80,26 @@
 		scroll-behavior: smooth;
 	}
 	section {
+		padding: 2rem;
 		height: 100vh;
+		box-sizing: border-box;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
 		scroll-snap-align: start;
 		scroll-padding: 2em;
 	}
-	label {
-		display: block;
+	section.intro {
+		background-color: var(--sky);
+	}
+	section.intro > div {
+		width: var(--width-large);
+		text-align: center;
+		max-width: 100%;
+	}
+	.intro p {
+		text-align: left;
+		padding: 1rem 0px;
 	}
 </style>
