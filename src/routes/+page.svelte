@@ -65,7 +65,7 @@
 				bind:value={section.value}
 				{section}
 				{index}
-				{scrollToSection}
+				handleSectionChange={scrollToSection}
 				resultsLink={index === sections.length - 1 ? resultsLink : null}
 			/>
 		</section>

@@ -4,7 +4,7 @@
 	export let value: number;
 	export let section: Section;
 	export let index: number;
-	export let scrollToSection: (evt: Event, idx: number) => void;
+	export let handleSectionChange: (evt: Event, idx: number) => void;
 	export let resultsLink: string | null; // Only used for final section
 </script>
 
@@ -17,7 +17,7 @@
 		<div class="slider">
 			<span aria-hidden="true">1</span>
 			<input
-				bind:value
+				bind:value={section.value}
 				name={section.key}
 				id={section.key}
 				type="range"
@@ -38,12 +38,14 @@
 
 	<div class="prev-next">
 		{#if index > 0}
-			<a href={`#section-${index - 1}`} onclick={(e) => scrollToSection(e, index - 1)}>
+			<a href={`#section-${index - 1}`} onclick={(e) => handleSectionChange(e, index - 1)}>
 				Previous
 			</a>
 		{/if}
 		{#if !resultsLink}
-			<a href={`#section-${index + 1}`} onclick={(e) => scrollToSection(e, index + 1)}> Next </a>
+			<a href={`#section-${index + 1}`} onclick={(e) => handleSectionChange(e, index + 1)}>
+				Next
+			</a>
 		{/if}
 	</div>
 
