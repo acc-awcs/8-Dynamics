@@ -1,5 +1,6 @@
 <script lang="ts">
-	import * as d3 from 'd3';
+	import { line, scaleLinear } from 'd3';
+
 	export let data;
 
 	let answers = data.object;
@@ -12,13 +13,11 @@
 		ticks: [1, 2, 3, 4, 5]
 	};
 
-	let radialScale = d3
-		.scaleLinear()
+	let radialScale = scaleLinear()
 		.domain([0, 5])
 		.range([0, config.d / 2]);
 
-	let lineHelper = d3
-		.line()
+	let lineHelper = line()
 		.x((d: [number, number]) => d[0])
 		.y((d: [number, number]) => d[1]);
 
@@ -29,7 +28,7 @@
 		return { x: config.px + (config.d / 2 + x), y: config.py + (config.d / 2 - y) };
 	}
 
-	// // Method for drawing non-circle tick mark
+	// Method for drawing non-circle tick mark
 	// `tick` maps to range values 1-5 per question
 	// `tickToPolygon` draws the concentric octagons
 	function tickToPolygon(tick: number) {
@@ -93,6 +92,7 @@
 	);
 </script>
 
+<h1>Your Results</h1>
 <div id="container" style="position: relative; padding: 160px">
 	<svg
 		id="chart"
@@ -119,10 +119,3 @@
 		{/each}
 	</svg>
 </div>
-
-<h1>Your Results!</h1>
-<!-- <ul>
-	{#each data.answers as answer}
-		<li>{answer.key}: {answer.value}</li>
-	{/each}
-</ul> -->
