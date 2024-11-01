@@ -2,14 +2,19 @@
 	import * as d3 from 'd3';
 	import { tick } from 'svelte';
 
+	interface Coord {
+		x: number;
+		y: number;
+	}
+
 	export let data;
-	let answers = [{ A: 1, B: 4, C: 3, D: 2, E: 5, F: 1, G: 2, H: 4 }];
+	let answers = { A: 1, B: 4, C: 3, D: 2, E: 5, F: 1, G: 2, H: 4 };
 	const config = {
 		d: 500, // diameter of chart
 		px: 20, // padding horizontal each side
 		py: 20, // padding vertical each side
 		answerR: 18, // answer circle radius, should not be more than padding
-		features: Object.keys(answers[0]),
+		features: Object.keys(answers),
 		ticks: [1, 2, 3, 4, 5]
 		// minAnswer: 1,
 		// maxAnswer: 5,
@@ -19,6 +24,25 @@
 		.scaleLinear()
 		.domain([0, 5])
 		.range([0, config.d / 2]);
+
+	let lineHelper = d3
+		.line()
+		.x((d: [number, number]) => d[0])
+		.y((d: [number, number]) => d[1]);
+
+	function getPathCoordinates(data_point: any): [number, number][] {
+		let coordinates = [];
+		for (var i = 0; i < config.features.length; i++) {
+			let ft_name = config.features[i];
+			let angle = Math.PI / 2 + (2 * Math.PI * i) / config.features.length;
+			coordinates.push(angleToCoordinate(angle, data_point[ft_name]));
+		}
+		// [{ x, y }]
+		const final: [number, number][] = coordinates.map((c) => [c.x, c.y]); // [[x, y], [x, y]]
+		console.log({ data_point, final });
+		return final;
+	}
+	let answerCoords = getPathCoordinates(answers);
 
 	// // let svg = d3
 	// // 	.select('#chart')
@@ -32,11 +56,12 @@
 	}
 
 	// // Method for drawing non-circle tick mark
+	// `tick` maps to range values 1-5 per question
+	// `tickToPolygon` draws the concentric octagons
 	function tickToPolygon(tick: number) {
 		const numbers = config.features
 			.map((f, i) => {
 				let angle = Math.PI / 2 + (2 * Math.PI * i) / config.features.length;
-				console.log({ angle });
 				return angleToCoordinate(angle, tick);
 			})
 			.reduce((prev, curr) => {
@@ -46,6 +71,7 @@
 		return numbers;
 	}
 
+	// `featureLine` draws the lines from center of the octagons to create the web
 	function featureLine(featureIdx: number) {
 		let pct = featureIdx / config.features.length;
 		let angle = Math.PI / 2 + 2 * Math.PI * pct;
@@ -84,6 +110,7 @@
 				y2={featureLine(idx).y}
 			/>
 		{/each}
+		<path stroke-width="3" stroke="navy" fill="navy" opacity="0.8" d={lineHelper(answerCoords)} />
 	</svg>
 </div>
 
