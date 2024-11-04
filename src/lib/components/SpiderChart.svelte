@@ -5,8 +5,7 @@
 
 	const config = {
 		d: 500, // diameter of chart
-		px: 20, // padding horizontal each side
-		py: 20, // padding vertical each side
+		p: 20, // padding each side
 		answerR: 18, // answer circle radius, should not be more than padding
 		labelD: 160, // label diameter
 		ticks: [1, 2, 3, 4, 5]
@@ -26,7 +25,7 @@
 		// multiplying by -1 makes the math count clockwise
 		let x = Math.cos(angle) * radialScale(value) * -1;
 		let y = Math.sin(angle) * radialScale(value);
-		return { x: config.px + (config.d / 2 + x), y: config.py + (config.d / 2 - y) };
+		return { x: config.p + (config.d / 2 + x), y: config.p + (config.d / 2 - y) };
 	}
 
 	// Method for drawing non-circle tick mark
@@ -45,12 +44,19 @@
 		return numbers;
 	}
 
-	// `featureLine` draws the lines from center of the octagons to create the web
-	function featureLine(featureIdx: number) {
-		let pct = featureIdx / features.length;
-		let angle = Math.PI / 2 + 2 * Math.PI * pct;
-
-		return angleToCoordinate(angle, 5);
+	// `radialTickLines` calculates the lines from center of the octagons to create the web
+	function radialTickLines() {
+		let lines: { outerX: number; outerY: number }[] = [];
+		for (var i = 0; i < features.length; i++) {
+			let pct = i / features.length;
+			let angle = Math.PI / 2 + 2 * Math.PI * pct;
+			const { x, y } = angleToCoordinate(angle, 5);
+			lines.push({
+				outerX: x,
+				outerY: y
+			});
+		}
+		return lines;
 	}
 
 	function drawAnswerShape(answers: Record<string, number>): string | null {
@@ -98,7 +104,7 @@
 		const points = [];
 		const angleStep = (2 * Math.PI) / numPoints;
 		// not using radialScale because we want a radius outside those bounds
-		const radius = config.d / 2 + config.px + config.labelD / 2;
+		const radius = config.d / 2 + config.p + config.labelD / 2;
 
 		for (let i = 0; i < numPoints; i++) {
 			const angle = i * angleStep;
@@ -112,19 +118,21 @@
 </script>
 
 <div class="outer">
-	<svg id="chart" width={config.d + 2 * config.px} height={config.d + 2 * config.py}>
-		{#each config.ticks as tick}
-			<polygon fill="none" stroke="black" points={tickToPolygon(tick)} />
-		{/each}
-		{#each features as feature, idx}
-			<line
-				stroke="black"
-				x1={config.px + config.d / 2}
-				y1={config.py + config.d / 2}
-				x2={featureLine(idx).x}
-				y2={featureLine(idx).y}
-			/>
-		{/each}
+	<svg id="chart" width={config.d + 2 * config.p} height={config.d + 2 * config.p}>
+		<g id="ticks">
+			{#each config.ticks as tick}
+				<!-- concentric octogons -->
+				<polygon points={tickToPolygon(tick)} />
+			{/each}
+			{#each radialTickLines() as f}
+				<line
+					x1={config.p + config.d / 2}
+					y1={config.p + config.d / 2}
+					x2={f.outerX}
+					y2={f.outerY}
+				/>
+			{/each}
+		</g>
 		<g id="answer">
 			<path stroke-width="3" opacity="0.8" d={drawAnswerShape(answers)} />
 			{#each formattedAnswers as ans}
@@ -155,6 +163,13 @@
 	svg {
 		display: block;
 		margin: 0 auto;
+	}
+
+	/* TICKS SHAPES */
+	#ticks line,
+	#ticks polygon {
+		fill: none;
+		stroke: var(--charcoal);
 	}
 
 	/* ANSWER SHAPES */
