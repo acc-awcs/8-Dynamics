@@ -3,17 +3,20 @@
 	import { line, scaleLinear } from 'd3';
 	let { answers, features }: { answers: Record<string, number>; features: string[] } = $props();
 
-	const config = {
-		d: 500, // diameter of chart
-		p: 20, // padding each side
-		answerR: 18, // answer circle radius, should not be more than padding
-		labelD: 160, // label diameter
+	const BREAKPOINT = 800;
+	let innerWidth = $state(500);
+	const config = $derived({
+		d: innerWidth > BREAKPOINT ? 500 : innerWidth - 240, // diameter of chart
+		p: 20, // padding each side to allow answer circles to render in svg container
+		labelD: innerWidth > BREAKPOINT ? 160 : 100, // dynamics label text diameter
 		ticks: [1, 2, 3, 4, 5]
-	};
+	});
 
-	let radialScale = scaleLinear()
-		.domain([0, 5])
-		.range([0, config.d / 2]);
+	let radialScale = $derived(
+		scaleLinear()
+			.domain([0, 5])
+			.range([0, config.d / 2])
+	);
 
 	let lineHelper = line()
 		.x((d: [number, number]) => d[0])
@@ -78,24 +81,26 @@
 			answer
 		};
 	}
-	const formattedAnswers = features.reduce(
-		(
-			resultArray: {
-				feature: string;
-				answer: number;
-				xCoord: number;
-				yCoord: number;
-				idx: number;
-			}[],
-			feature,
-			idx
-		) => {
-			const answer = answers[feature];
-			const coords = getCircleCoords({ answer, idx });
-			resultArray.push({ feature, answer, xCoord: coords.x, yCoord: coords.y, idx });
-			return resultArray;
-		},
-		[]
+	const formattedAnswers = $derived(
+		features.reduce(
+			(
+				resultArray: {
+					feature: string;
+					answer: number;
+					xCoord: number;
+					yCoord: number;
+					idx: number;
+				}[],
+				feature,
+				idx
+			) => {
+				const answer = answers[feature];
+				const coords = getCircleCoords({ answer, idx });
+				resultArray.push({ feature, answer, xCoord: coords.x, yCoord: coords.y, idx });
+				return resultArray;
+			},
+			[]
+		)
 	);
 
 	// calculates the offset of each label's centerpoint from the center of the chart
@@ -117,7 +122,8 @@
 	});
 </script>
 
-<div class="outer">
+<svelte:window bind:innerWidth />
+<div class="outer" style={`padding: ${config.labelD}px;`}>
 	<svg id="chart" width={config.d + 2 * config.p} height={config.d + 2 * config.p}>
 		<g id="ticks">
 			{#each config.ticks as tick}
@@ -136,7 +142,7 @@
 		<g id="answer">
 			<path stroke-width="3" opacity="0.8" d={drawAnswerShape(answers)} />
 			{#each formattedAnswers as ans}
-				<circle cx={ans.xCoord} cy={ans.yCoord} r={config.answerR}></circle>
+				<circle cx={ans.xCoord} cy={ans.yCoord} r={config.p}></circle>
 				<text x={ans.xCoord - 5} y={ans.yCoord + 3}>{ans.answer}</text>
 			{/each}
 		</g>
@@ -147,9 +153,11 @@
 				class="dynamic"
 				style={`width: ${config.labelD}px; height: ${config.labelD}px; transform: translate(${label.offsetX}px, ${label.offsetY}px)`}
 			>
-				Dynamic {idx + 1}
-				<br />
-				{label.text}
+				{#if innerWidth >= BREAKPOINT}
+					{label.text}
+				{:else}
+					Dynamic {idx + 1}
+				{/if}
 			</div>
 		{/each}
 	</div>

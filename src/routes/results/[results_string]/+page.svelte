@@ -5,6 +5,6 @@
 </script>
 
 <h1>Your Results</h1>
-<div id="container" style="position: relative; padding: 160px">
+<main>
 	<SpiderChart answers={data.object} features={Object.keys(data.object)} />
-</div>
+</main>
