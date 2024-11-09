@@ -99,6 +99,16 @@
 		width: 100%;
 		display: flex;
 		gap: 10px;
+		justify-content: space-between;
+
+		a {
+			color: var(--moss);
+			font-weight: bold;
+			text-decoration: none;
+			padding: 8px;
+			border-radius: 8px;
+			border: 1px solid var(--moss);
+		}
 	}
 
 	.finish {
