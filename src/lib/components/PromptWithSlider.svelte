@@ -43,7 +43,11 @@
 			</a>
 		{/if}
 		{#if !resultsLink}
-			<a href={`#section-${index + 1}`} onclick={(e) => handleSectionChange(e, index + 1)}>
+			<a
+				class="next"
+				href={`#section-${index + 1}`}
+				onclick={(e) => handleSectionChange(e, index + 1)}
+			>
 				Next
 			</a>
 		{/if}
@@ -108,6 +112,9 @@
 			padding: 8px;
 			border-radius: 8px;
 			border: 1px solid var(--moss);
+		}
+		.next {
+			margin-left: auto;
 		}
 	}
 
