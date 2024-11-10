@@ -1,4 +1,5 @@
 <script lang="ts">
+	import dynamics from '$lib/dynamics';
 	import { line, scaleLinear } from 'd3';
 
 	export let data;
@@ -90,6 +91,22 @@
 		},
 		[]
 	);
+	let container: HTMLDivElement;
+
+	function mouseOver(description: string) {
+		container = document.createElement('div');
+		container.textContent = description;
+		document.body.appendChild(container);
+	}
+
+	function mouseMove(event: MouseEvent) {
+		container.style.position = 'absolute';
+		container.style.left = `${event.pageX + 10}px`;
+		container.style.top = `${event.pageY + 10}px`;
+	}
+	function mouseOut() {
+		container.remove();
+	}
 </script>
 
 <h1>Your Results</h1>
@@ -114,7 +131,15 @@
 		{/each}
 		<path stroke-width="3" stroke="navy" fill="navy" opacity="0.8" d={drawAnswerShape(answers)} />
 		{#each formattedAnswers as ans}
-			<circle cx={ans.xCoord} cy={ans.yCoord} fill="navy" r={config.answerR}></circle>
+			<circle
+				on:mouseover={() => mouseOver(dynamics[ans.idx])}
+				on:mousemove={(evt) => mouseMove(evt)}
+				on:mouseout={() => mouseOut()}
+				cx={ans.xCoord}
+				cy={ans.yCoord}
+				fill="navy"
+				r={config.answerR}
+			></circle>
 			<text x={ans.xCoord - 5} y={ans.yCoord + 3} fill="white">{ans.answer}</text>
 		{/each}
 	</svg>
