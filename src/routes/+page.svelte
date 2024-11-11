@@ -15,8 +15,6 @@
 		})
 	);
 
-	const onSafari = navigator.userAgent.includes('Safari');
-
 	function scrollToSection(evt: Event, idx: number) {
 		// supercedes the default a tag link for smooth scrolling if javascript is enabled
 		evt.preventDefault();
@@ -29,7 +27,7 @@
 		// Focus the input in the given section once in view, preventing duplicate scrolling.
 		// Unlike other browsers, Safari seems to assume focus-visible on a mouse link click,
 		// so focusing to the section for Safari instead of the input to avoid triggering focus styles for mouse users.
-		const elementIdToFocus = onSafari ? `section-${idx}` : key;
+		const elementIdToFocus = navigator.userAgent.includes('Safari') ? `section-${idx}` : key;
 		document.getElementById(elementIdToFocus)?.focus({ preventScroll: true });
 	}
 
@@ -66,9 +64,9 @@
 	</section>
 
 	{#each sections as section, index}
-		<!-- Allow the section to be focusable for Safari to avoid focus styles being applied to input on link click -->
+		<!-- Allow focus jumping to section to avoid focus styles being applied to input on Safari link click -->
 		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-		<section id={`section-${index}`} tabindex={onSafari ? -1 : null} bind:this={section.el}>
+		<section id={`section-${index}`} tabindex={-1} bind:this={section.el}>
 			<PromptWithSlider
 				bind:value={section.value}
 				{section}
