@@ -106,12 +106,15 @@
 		justify-content: space-between;
 
 		a {
-			color: var(--moss);
+			color: var(--charcoal);
 			font-weight: bold;
 			text-decoration: none;
 			padding: 8px;
 			border-radius: 8px;
-			border: 1px solid var(--moss);
+			border: 1px solid var(--charcoal);
+		}
+		a:hover {
+			background-color: var(--mustard);
 		}
 		.next {
 			margin-left: auto;
