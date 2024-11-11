@@ -15,6 +15,8 @@
 		})
 	);
 
+	const onSafari = navigator.userAgent.includes('Safari');
+
 	function scrollToSection(evt: Event, idx: number) {
 		// supercedes the default a tag link for smooth scrolling if javascript is enabled
 		evt.preventDefault();
@@ -23,8 +25,12 @@
 		el.scrollIntoView({
 			behavior: 'smooth'
 		});
-		// focus the input in the given section once in view
-		document.getElementById(key)?.focus();
+
+		// Focus the input in the given section once in view, preventing duplicate scrolling.
+		// Unlike other browsers, Safari seems to assume focus-visible on a mouse link click,
+		// so focusing to the section for Safari instead of the input to avoid triggering focus styles for mouse users.
+		const elementIdToFocus = onSafari ? `section-${idx}` : key;
+		document.getElementById(elementIdToFocus)?.focus({ preventScroll: true });
 	}
 
 	const resultsLink = $derived.by(() => {
@@ -60,7 +66,8 @@
 	</section>
 
 	{#each sections as section, index}
-		<section id={`section-${index}`} bind:this={section.el}>
+		<!-- Allow the section to be focusable for Safari to avoid focus styles being applied to input on link click -->
+		<section id={`section-${index}`} tabindex={onSafari ? -1 : 0} bind:this={section.el}>
 			<PromptWithSlider
 				bind:value={section.value}
 				{section}
@@ -90,6 +97,7 @@
 		flex-direction: column;
 		scroll-snap-align: start;
 		scroll-padding: 2em;
+		outline: 0px;
 	}
 	section.intro {
 		background-color: var(--sky);
