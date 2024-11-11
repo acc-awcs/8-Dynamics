@@ -1,7 +1,9 @@
 <script lang="ts">
+	import dynamics from '$lib/dynamics';
 	import { line, scaleLinear } from 'd3';
+	import type { Action } from 'svelte/action';
 
-	export let data;
+	let { data } = $props();
 
 	let answers = data.object;
 	const config = {
@@ -90,6 +92,40 @@
 		},
 		[]
 	);
+
+	const tooltipaction: Action<SVGCircleElement, { description: string }> = (
+		element: SVGCircleElement,
+		params: { description: string }
+	) => {
+		let tooltip: HTMLDivElement;
+
+		$effect(() => {
+			element.addEventListener('mouseover', () => {
+				tooltip = document.createElement('div');
+				tooltip.innerText = params.description;
+				tooltip.style.position = 'absolute';
+				tooltip.style.zIndex = '10';
+				tooltip.style.backgroundColor = 'var(--cream)';
+				tooltip.style.padding = '8px';
+				tooltip.style.color = 'var(--moss)';
+				tooltip.style.border = '1px solid var(--moss)';
+				document.body.appendChild(tooltip);
+			});
+
+			element.addEventListener('mousemove', (evt) => {
+				tooltip.style.left = `${evt.pageX + 10}px`;
+				tooltip.style.top = `${evt.pageY + 10}px`;
+			});
+
+			element.addEventListener('mouseleave', () => {
+				tooltip.remove();
+			});
+
+			return () => {
+				tooltip.remove();
+			};
+		});
+	};
 </script>
 
 <h1>Your Results</h1>
@@ -114,7 +150,13 @@
 		{/each}
 		<path stroke-width="3" stroke="navy" fill="navy" opacity="0.8" d={drawAnswerShape(answers)} />
 		{#each formattedAnswers as ans}
-			<circle cx={ans.xCoord} cy={ans.yCoord} fill="navy" r={config.answerR}></circle>
+			<circle
+				cx={ans.xCoord}
+				cy={ans.yCoord}
+				fill="navy"
+				r={config.answerR}
+				use:tooltipaction={{ description: dynamics[ans.idx] }}
+			/>
 			<text x={ans.xCoord - 5} y={ans.yCoord + 3} fill="white">{ans.answer}</text>
 		{/each}
 	</svg>
