@@ -33,11 +33,6 @@ body {
 	white-space: nowrap;
 }
 
-a {
-	color: var(--mustard);
-	font-weight: bold;
-}
-
 .btn {
 	font-weight: bold;
 	text-decoration: none;
