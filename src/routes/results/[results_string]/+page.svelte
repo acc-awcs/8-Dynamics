@@ -6,5 +6,5 @@
 
 <h1>Your Results</h1>
 <main>
-	<SpiderChart answers={data.object} features={Object.keys(data.object)} />
+	<SpiderChart answers={data.object} />
 </main>

@@ -1,9 +1,10 @@
 <script lang="ts">
 	import dynamics from '$lib/dynamics';
 	import { line, scaleLinear } from 'd3';
-	let { answers, features }: { answers: Record<string, number>; features: string[] } = $props();
+	let { answers }: { answers: Record<string, number> } = $props();
 
 	const BREAKPOINT = 800;
+	const features = $derived(Object.keys(answers));
 	let innerWidth = $state(500);
 	const config = $derived({
 		d: innerWidth > BREAKPOINT ? 500 : innerWidth - 240, // diameter of chart
