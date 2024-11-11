@@ -67,7 +67,7 @@
 
 	{#each sections as section, index}
 		<!-- Allow the section to be focusable for Safari to avoid focus styles being applied to input on link click -->
-		<section id={`section-${index}`} tabindex={onSafari ? -1 : 0} bind:this={section.el}>
+		<section id={`section-${index}`} tabindex={onSafari ? -1 : null} bind:this={section.el}>
 			<PromptWithSlider
 				bind:value={section.value}
 				{section}
