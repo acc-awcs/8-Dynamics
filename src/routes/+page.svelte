@@ -67,6 +67,7 @@
 
 	{#each sections as section, index}
 		<!-- Allow the section to be focusable for Safari to avoid focus styles being applied to input on link click -->
+		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 		<section id={`section-${index}`} tabindex={onSafari ? -1 : null} bind:this={section.el}>
 			<PromptWithSlider
 				bind:value={section.value}
