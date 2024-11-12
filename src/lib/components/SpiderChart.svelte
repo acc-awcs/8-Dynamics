@@ -264,4 +264,9 @@
 		-webkit-box-orient: vertical;
 		overflow: hidden;
 	}
+	.truncated-label:focus {
+		outline: none;
+		border: 2px solid var(--mustard);
+		border-radius: 10px;
+	}
 </style>
