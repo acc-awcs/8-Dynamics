@@ -161,9 +161,9 @@
 			<path stroke-width="3" opacity="0.8" d={drawAnswerShape(answers)} />
 			{#each formattedAnswers as ans}
 				<circle
-					on:mouseover={() => mouseOver(dynamics[ans.idx])}
-					on:mousemove={(evt) => mouseMove(evt)}
-					on:mouseout={() => mouseOut()}
+					onmouseover={() => mouseOver(dynamics[ans.idx])}
+					onmousemove={mouseMove}
+					onmouseout={mouseOut}
 					cx={ans.xCoord}
 					cy={ans.yCoord}
 					r={config.p}
