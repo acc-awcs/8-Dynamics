@@ -9,7 +9,7 @@
 	const config = $derived({
 		d: innerWidth > BREAKPOINT ? 500 : innerWidth - 240, // diameter of chart
 		p: 20, // padding each side to allow answer circles to render in svg container
-		labelD: innerWidth > BREAKPOINT ? 160 : 100, // dynamics label text diameter
+		labelD: innerWidth > BREAKPOINT ? 160 : 120, // dynamics label text diameter
 		ticks: [1, 2, 3, 4, 5]
 	});
 
@@ -196,8 +196,9 @@
 						onblur={() => removeDescription(hidden)}
 						role="button"
 						tabindex={idx + 2}
+						class="truncated-label"
 					>
-						Dynamic {idx + 1}
+						{dynamics[idx]}
 					</div>
 				{/if}
 			</div>
@@ -253,5 +254,14 @@
 		box-sizing: border-box;
 		color: var(--charcoal);
 		cursor: default;
+	}
+	.truncated-label {
+		display: box;
+		box-orient: vertical;
+		line-clamp: 3;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
 	}
 </style>
