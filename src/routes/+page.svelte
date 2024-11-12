@@ -78,6 +78,7 @@
 		height: 100vh;
 		scroll-snap-type: y mandatory;
 		scroll-behavior: smooth;
+		overscroll-behavior: contain;
 	}
 	section {
 		padding: 2rem;
