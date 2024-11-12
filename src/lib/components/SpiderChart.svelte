@@ -122,21 +122,35 @@
 		return points;
 	});
 
-	let container: HTMLDivElement;
+	let tooltip: HTMLDivElement;
+	let hidden: HTMLDivElement;
 
 	function mouseOver(description: string) {
-		container = document.createElement('div');
-		container.textContent = description;
-		document.body.appendChild(container);
+		tooltip = document.createElement('div');
+		tooltip.textContent = description;
+		tooltip.style.backgroundColor = 'var(--cream)';
+		tooltip.style.padding = '8px';
+		tooltip.style.color = 'var(--moss)';
+		tooltip.style.border = '1px solid var(--moss)';
+		tooltip.style.maxWidth = '200px';
+		document.body.appendChild(tooltip);
 	}
 
 	function mouseMove(event: MouseEvent) {
-		container.style.position = 'absolute';
-		container.style.left = `${event.pageX + 10}px`;
-		container.style.top = `${event.pageY + 10}px`;
+		tooltip.style.position = 'absolute';
+		tooltip.style.left = `${event.pageX + 10}px`;
+		tooltip.style.top = `${event.pageY + 10}px`;
 	}
-	function mouseOut() {
-		container.remove();
+
+	function focus(description: string) {
+		hidden = document.createElement('div');
+		hidden.textContent = description;
+		hidden.style.display = 'none';
+		document.body.appendChild(hidden);
+	}
+
+	function removeDescription(el: HTMLDivElement) {
+		el.remove();
 	}
 </script>
 
@@ -160,14 +174,7 @@
 		<g id="answer">
 			<path stroke-width="3" opacity="0.8" d={drawAnswerShape(answers)} />
 			{#each formattedAnswers as ans}
-				<circle
-					onmouseover={() => mouseOver(dynamics[ans.idx])}
-					onmousemove={mouseMove}
-					onmouseout={mouseOut}
-					cx={ans.xCoord}
-					cy={ans.yCoord}
-					r={config.p}
-				></circle>
+				<circle cx={ans.xCoord} cy={ans.yCoord} r={config.p}></circle>
 				<text x={ans.xCoord - 5} y={ans.yCoord + 3}>{ans.answer}</text>
 			{/each}
 		</g>
@@ -181,7 +188,17 @@
 				{#if innerWidth >= BREAKPOINT}
 					{label.text}
 				{:else}
-					Dynamic {idx + 1}
+					<div
+						onmouseover={() => mouseOver(dynamics[idx])}
+						onmousemove={mouseMove}
+						onmouseout={() => removeDescription(tooltip)}
+						onfocus={() => focus(dynamics[idx])}
+						onblur={() => removeDescription(hidden)}
+						role="button"
+						tabindex={idx + 2}
+					>
+						Dynamic {idx + 1}
+					</div>
 				{/if}
 			</div>
 		{/each}
@@ -235,5 +252,6 @@
 		padding: 1rem;
 		box-sizing: border-box;
 		color: var(--charcoal);
+		cursor: default;
 	}
 </style>
