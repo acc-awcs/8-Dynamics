@@ -5,7 +5,7 @@
 	let { data } = $props();
 
 	const sections: Section[] = $state(
-		data.dynamics.map((dynamic, idx) => {
+		data.dynamics.map(({ full: dynamic }, idx) => {
 			return {
 				key: 'ABCDEFGH'[idx],
 				dynamic,
