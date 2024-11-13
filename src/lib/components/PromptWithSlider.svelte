@@ -74,6 +74,7 @@
 		display: block;
 		font-weight: bold;
 		font-size: 1.3rem;
+		outline: none;
 	}
 
 	.input-wrapper {
@@ -91,6 +92,12 @@
 	.slider {
 		display: flex;
 		align-items: center;
+		padding: 10px 16px;
+		border: 4px solid var(--cream);
+		margin: -14px -20px;
+		border-radius: 28px;
+		transition: border 0.2s linear;
+		box-sizing: border-box;
 	}
 
 	.descriptions {
@@ -138,6 +145,14 @@
 		display: flex;
 		background: var(--charcoal);
 		cursor: pointer;
+	}
+
+	.slider:has(:focus-visible) {
+		border: 4px solid var(--mustard);
+	}
+
+	input[type='range']:focus {
+		outline: none;
 	}
 
 	/* Chrome, Safari, Opera, Edge */

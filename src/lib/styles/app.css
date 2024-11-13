@@ -33,6 +33,17 @@ body {
 	white-space: nowrap;
 }
 
+button,
+a {
+	transition: outline 0.2s linear;
+	transition-delay: 0.1s;
+}
+
+button:focus,
+a:focus {
+	outline: 4px solid var(--mustard);
+}
+
 .btn {
 	font-weight: bold;
 	text-decoration: none;
