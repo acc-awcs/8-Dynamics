@@ -117,7 +117,12 @@
 			const x = radius * Math.sin(angle);
 			// multiply y by -1 so it maps clockwise
 			const y = radius * Math.cos(angle) * -1;
-			points.push({ offsetX: x, offsetY: y, text: dynamics[i] });
+			points.push({
+				offsetX: x,
+				offsetY: y,
+				fullText: dynamics[i].full,
+				shortText: dynamics[i].short
+			});
 		}
 		return points;
 	});
@@ -186,19 +191,19 @@
 				style={`width: ${config.labelD}px; height: ${config.labelD}px; transform: translate(${label.offsetX}px, ${label.offsetY}px)`}
 			>
 				{#if innerWidth >= BREAKPOINT}
-					{label.text}
+					{label.fullText}
 				{:else}
 					<div
-						onmouseover={() => mouseOver(dynamics[idx])}
+						onmouseover={() => mouseOver(label.fullText)}
 						onmousemove={mouseMove}
 						onmouseout={() => removeDescription(tooltip)}
-						onfocus={() => focus(dynamics[idx])}
+						onfocus={() => focus(label.fullText)}
 						onblur={() => removeDescription(hidden)}
 						role="button"
 						tabindex={idx + 2}
 						class="truncated-label"
 					>
-						{dynamics[idx]}
+						{label.shortText}
 					</div>
 				{/if}
 			</div>
@@ -250,6 +255,7 @@
 		text-align: center;
 		display: flex;
 		align-items: center;
+		justify-content: center;
 		padding: 1rem;
 		box-sizing: border-box;
 		color: var(--charcoal);

@@ -5,7 +5,7 @@
 	let { data } = $props();
 
 	const sections: Section[] = $state(
-		data.dynamics.map((dynamic, idx) => {
+		data.dynamics.map(({ full: dynamic }, idx) => {
 			return {
 				key: 'ABCDEFGH'[idx],
 				dynamic,
@@ -23,8 +23,12 @@
 		el.scrollIntoView({
 			behavior: 'smooth'
 		});
-		// focus the input in the given section once in view
-		document.getElementById(key)?.focus();
+
+		// Focus the input in the given section once in view, preventing duplicate scrolling.
+		// Unlike other browsers, Safari seems to assume focus-visible on a mouse link click,
+		// so focusing to the section for Safari instead of the input to avoid triggering focus styles for mouse users.
+		const elementIdToFocus = navigator.userAgent.includes('Safari') ? `section-${idx}` : key;
+		document.getElementById(elementIdToFocus)?.focus({ preventScroll: true });
 	}
 
 	const resultsLink = $derived.by(() => {
@@ -60,7 +64,9 @@
 	</section>
 
 	{#each sections as section, index}
-		<section id={`section-${index}`} bind:this={section.el}>
+		<!-- Allow focus jumping to section to avoid focus styles being applied to input on Safari link click -->
+		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+		<section id={`section-${index}`} tabindex={-1} bind:this={section.el}>
 			<PromptWithSlider
 				bind:value={section.value}
 				{section}
@@ -90,6 +96,7 @@
 		flex-direction: column;
 		scroll-snap-align: start;
 		scroll-padding: 2em;
+		outline: 0px;
 	}
 	section.intro {
 		background-color: var(--sky);
