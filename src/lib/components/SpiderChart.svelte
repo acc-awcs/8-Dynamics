@@ -127,35 +127,20 @@
 		return points;
 	});
 
-	let tooltip: HTMLDivElement;
-	let hidden: HTMLDivElement;
-
-	function mouseOver(description: string) {
-		tooltip = document.createElement('div');
-		tooltip.textContent = description;
-		tooltip.style.backgroundColor = 'var(--cream)';
-		tooltip.style.padding = '8px';
-		tooltip.style.color = 'var(--moss)';
-		tooltip.style.border = '1px solid var(--moss)';
-		tooltip.style.maxWidth = '200px';
-		document.body.appendChild(tooltip);
+	function mouseOverOrFocus(id: string) {
+		const tooltip = document.getElementById(id)
+		if (tooltip) {
+			tooltip.style.left = '80px'
+			tooltip.style.top = '80px'
+			tooltip.style.visibility = 'visible'
+		}
 	}
 
-	function mouseMove(event: MouseEvent) {
-		tooltip.style.position = 'absolute';
-		tooltip.style.left = `${event.pageX + 10}px`;
-		tooltip.style.top = `${event.pageY + 10}px`;
-	}
-
-	function focus(description: string) {
-		hidden = document.createElement('div');
-		hidden.textContent = description;
-		hidden.style.display = 'none';
-		document.body.appendChild(hidden);
-	}
-
-	function removeDescription(el: HTMLDivElement) {
-		el.remove();
+	function mouseOutOrBlur(id: string) {
+		const tooltip = document.getElementById(id)
+		if (tooltip) {
+			tooltip.style.visibility = 'hidden'
+		}
 	}
 </script>
 
@@ -194,16 +179,18 @@
 					{label.fullText}
 				{:else}
 					<div
-						onmouseover={() => mouseOver(label.fullText)}
-						onmousemove={mouseMove}
-						onmouseout={() => removeDescription(tooltip)}
-						onfocus={() => focus(label.fullText)}
-						onblur={() => removeDescription(hidden)}
+						onmouseover={() => mouseOverOrFocus(`tooltip-${idx}`)}
+						onfocus={() => mouseOverOrFocus(`tooltip-${idx}`)}
+						onmouseout={() => mouseOutOrBlur(`tooltip-${idx}`)}
+						onblur={() => mouseOutOrBlur(`tooltip-${idx}`)}
 						role="button"
 						tabindex={idx + 2}
 						class="truncated-label"
 					>
 						{label.shortText}
+					</div>
+					<div id={`tooltip-${idx}`} class="tooltip" role="tooltip">
+						{label.fullText}
 					</div>
 				{/if}
 			</div>
@@ -261,18 +248,20 @@
 		color: var(--charcoal);
 		cursor: default;
 	}
-	.truncated-label {
-		display: box;
-		box-orient: vertical;
-		line-clamp: 3;
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
+	.tooltip {
+		position: absolute;
+		visibility: hidden;	
+		background-color: var(--cream);
+		padding: 8px;
+		color: var(--moss);
+		border: 1px solid var(--moss);
+		border-radius: 8px;
+		text-align: left;
 	}
 	.truncated-label:focus {
 		outline: none;
 		border: 2px solid var(--mustard);
 		border-radius: 10px;
+		padding: 4px
 	}
 </style>
