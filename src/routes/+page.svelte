@@ -46,6 +46,10 @@
 </svelte:head>
 
 <main>
+	<div class="clouds-overlay-wrapper">
+		<div class="clouds-overlay"></div>
+	</div>
+
 	<section class="intro">
 		<div>
 			<h1>8 Dynamics of Climate Engagement</h1>
@@ -53,13 +57,9 @@
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lobortis mi arcu, sed iaculis
 				sapien sodales sit amet. Vestibulum magna urna, laoreet vitae ante et, lobortis laoreet
 				justo. Aliquam erat volutpat. Quisque commodo, ex non bibendum commodo, nulla nisi posuere
-				enim, ut hendrerit tellus tortor sed sem. Maecenas sollicitudin tortor et orci porta
-				pharetra. Sed eget nisi facilisis, ultricies tortor et, accumsan mi. Aenean lobortis et odio
-				vitae mollis. Nullam porttitor, magna ut feugiat suscipit, massa enim congue quam, ultricies
-				tincidunt velit mauris a dui. Pellentesque accumsan felis pellentesque, tempus odio at,
-				venenatis nulla.
+				enim, ut hendrerit tellus tortor sed sem.
 			</p>
-			<a class="btn primary" href="#section-0" onclick={(e) => scrollToSection(e, 0)}>Start</a>
+			<a class="btn secondary" href="#section-0" onclick={(e) => scrollToSection(e, 0)}>Start</a>
 		</div>
 	</section>
 
@@ -99,15 +99,42 @@
 		outline: 0px;
 	}
 	section.intro {
-		background-color: var(--sky);
+		background-image: url('$lib/assets/cloud-hero-layer-1.jpg');
+		background-size: cover;
 	}
 	section.intro > div {
 		width: var(--width-large);
 		text-align: center;
 		max-width: 100%;
 	}
+	h1 {
+		font-size: 44px;
+		font-weight: 200;
+		font-family: serif;
+		color: var(--cream);
+	}
 	.intro p {
-		text-align: left;
-		padding: 1rem 0px;
+		text-align: center;
+		font-family: sans-serif;
+		font-size: 20px;
+		font-weight: 300;
+		line-height: 30px;
+		color: var(--cream);
+		margin-bottom: 40px;
+	}
+	.clouds-overlay-wrapper {
+		background-size: cover;
+		height: 100vh;
+		position: absolute;
+		width: 100%;
+		z-index: 1;
+	}
+	.clouds-overlay {
+		background-size: cover;
+		background-image: url('$lib/assets/cloud-hero-layer-2.png');
+		height: 100vh;
+		position: absolute;
+		width: 100%;
+		z-index: 1;
 	}
 </style>
