@@ -4,6 +4,19 @@
 
 	let { data } = $props();
 
+	// Cloud parallax variables
+	let scrollY = $state(0);
+	let innerWidth = $state(0);
+	let innerHeight = $state(0);
+	const OVERLAY_OFFSET_LEFT_PERCENT = 5;
+	const OVERLAY_OFFSET_BOTTOM_PERCENT = 4;
+
+	// The cloud overlay has additional width/height on the left and bottom.
+	// As the user scrolls, we translate the overlay to move towards these initially hidden edges.
+	let percentMoved = $derived(Math.min(scrollY / innerHeight, 1));
+	let translateX = $derived(percentMoved * ((OVERLAY_OFFSET_LEFT_PERCENT / 100) * innerWidth));
+	let translateY = $derived(percentMoved * (-(OVERLAY_OFFSET_BOTTOM_PERCENT / 100) * innerHeight));
+
 	const sections: Section[] = $state(
 		data.dynamics.map(({ full: dynamic }, idx) => {
 			return {
@@ -45,13 +58,23 @@
 	<meta name="description" content="About this app" />
 </svelte:head>
 
-<main>
-	<div class="clouds-overlay-wrapper">
-		<div class="clouds-overlay"></div>
-	</div>
+<svelte:window bind:innerWidth bind:innerHeight />
 
+<main onscroll={(e) => (scrollY = (e.target as HTMLElement)?.scrollTop)}>
 	<section class="intro">
-		<div>
+		<div class="clouds-overlay-wrapper">
+			<div
+				class="clouds-overlay"
+				style="
+					transform: translate({translateX}px, {translateY}px); 
+					height: {100 + OVERLAY_OFFSET_BOTTOM_PERCENT}vh; 
+					bottom: {-OVERLAY_OFFSET_BOTTOM_PERCENT}vh;
+					width: {100 + OVERLAY_OFFSET_LEFT_PERCENT}%;
+					left: {-OVERLAY_OFFSET_LEFT_PERCENT}%;
+					"
+			></div>
+		</div>
+		<div class="content">
 			<h1>8 Dynamics of Climate Engagement</h1>
 			<p>
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lobortis mi arcu, sed iaculis
@@ -85,6 +108,7 @@
 		scroll-snap-type: y mandatory;
 		scroll-behavior: smooth;
 		overscroll-behavior: contain;
+		position: relative;
 	}
 	section {
 		padding: 2rem;
@@ -102,10 +126,12 @@
 		background-image: url('$lib/assets/cloud-hero-layer-1.jpg');
 		background-size: cover;
 	}
-	section.intro > div {
+	section.intro .content {
 		width: var(--width-large);
 		text-align: center;
 		max-width: 100%;
+		position: relative;
+		z-index: 2;
 	}
 	h1 {
 		font-size: 44px;
@@ -123,18 +149,15 @@
 		margin-bottom: 40px;
 	}
 	.clouds-overlay-wrapper {
-		background-size: cover;
 		height: 100vh;
-		position: absolute;
 		width: 100%;
 		z-index: 1;
+		position: absolute;
+		overflow: hidden;
 	}
 	.clouds-overlay {
 		background-size: cover;
 		background-image: url('$lib/assets/cloud-hero-layer-2.png');
-		height: 100vh;
 		position: absolute;
-		width: 100%;
-		z-index: 1;
 	}
 </style>
