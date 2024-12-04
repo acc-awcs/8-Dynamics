@@ -37,14 +37,9 @@
 	</div>
 
 	<div class="prev-next">
-		{#if index > 0}
-			<a href={`#section-${index - 1}`} onclick={(e) => handleSectionChange(e, index - 1)}>
-				Previous
-			</a>
-		{/if}
 		{#if !resultsLink}
 			<a
-				class="next"
+				class="btn secondary"
 				href={`#section-${index + 1}`}
 				onclick={(e) => handleSectionChange(e, index + 1)}
 			>
@@ -66,15 +61,17 @@
 		width: var(--width-small);
 		display: flex;
 		flex-direction: column;
-		align-items: flex-start;
+		align-items: center;
 		justify-content: center;
 	}
 
 	label {
 		display: block;
-		font-weight: bold;
-		font-size: 1.3rem;
+		font-family: serif;
+		font-size: 26px;
+		font-style: italic;
 		outline: none;
+		text-align: center;
 	}
 
 	.input-wrapper {
@@ -86,7 +83,10 @@
 	}
 
 	.value {
-		font-size: 1.2rem;
+		font-size: 44px;
+		text-align: center;
+		font-weight: 600;
+		color: var(--mustard);
 	}
 
 	.slider {
@@ -98,34 +98,22 @@
 		border-radius: 28px;
 		transition: border 0.2s linear;
 		box-sizing: border-box;
+		font-size: 24px;
+		font-weight: 600;
 	}
 
 	.descriptions {
 		display: flex;
 		justify-content: space-between;
-		color: var(--moss);
+		font-size: 16px;
+		font-weight: 600;
 	}
 
 	.prev-next {
 		width: 100%;
 		display: flex;
 		gap: 10px;
-		justify-content: space-between;
-
-		a {
-			color: var(--charcoal);
-			font-weight: bold;
-			text-decoration: none;
-			padding: 8px;
-			border-radius: 8px;
-			border: 1px solid var(--charcoal);
-		}
-		a:hover {
-			background-color: var(--mustard);
-		}
-		.next {
-			margin-left: auto;
-		}
+		justify-content: center;
 	}
 
 	.finish {
@@ -141,7 +129,7 @@
 		width: 100%;
 		background: transparent;
 		margin: 0px 1rem;
-		height: 2px;
+		height: 1px;
 		display: flex;
 		background: var(--charcoal);
 		cursor: pointer;
@@ -160,9 +148,7 @@
 		height: 30px;
 		aspect-ratio: 1;
 		border-radius: 50%;
-		border: 2px solid #fff;
-		box-shadow: 0px 2px 6px 1px rgba(0, 0, 0, 0.2);
-		background-color: var(--rust);
+		background-color: var(--mustard);
 		-webkit-appearance: none;
 		appearance: none;
 	}
@@ -173,9 +159,7 @@
 		width: 25px;
 		background: none;
 		border-radius: 50%;
-		border: 2px solid #fff;
-		box-shadow: 0px 2px 6px 1px rgba(0, 0, 0, 0.2);
-		background-color: var(--rust);
+		background-color: var(--mustard);
 		-moz-appearance: none;
 		appearance: none;
 	}
