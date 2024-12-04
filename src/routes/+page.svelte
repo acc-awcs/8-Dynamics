@@ -159,5 +159,6 @@
 		background-size: cover;
 		background-image: url('$lib/assets/cloud-hero-layer-2.png');
 		position: absolute;
+		transition: transform 0.1s linear;
 	}
 </style>
