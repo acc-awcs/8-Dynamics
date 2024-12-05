@@ -67,7 +67,8 @@
 
 	label {
 		display: block;
-		font-family: serif;
+		font-family: 'adobe-garamond-pro', serif;
+		font-weight: 400;
 		font-size: 26px;
 		font-style: italic;
 		outline: none;
@@ -107,6 +108,7 @@
 		justify-content: space-between;
 		font-size: 16px;
 		font-weight: 600;
+		line-height: 1.6;
 	}
 
 	.prev-next {

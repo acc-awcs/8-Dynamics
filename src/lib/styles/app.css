@@ -13,12 +13,40 @@
 	--width-small: 610px;
 }
 
+/* Custom fonts */
+@font-face {
+	font-family: 'General Grotesque';
+	src: url('/fonts/GeneralGrotesque-Book.woff2') format('woff2');
+	font-weight: 300;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'General Grotesque';
+	src: url('/fonts/GeneralGrotesque-Demi.woff2') format('woff2');
+	font-weight: 600;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'Editorial New';
+	src: url('/fonts/PPEditorialNew-Ultralight.woff2') format('woff2');
+	font-weight: 200;
+	font-style: normal;
+}
+
 body {
-	/* Replace with brand guide typography */
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: 'General Grotesque', Helvetica, Arial, sans-serif;
+	font-weight: 300;
+	font-size: 14px;
 	color: var(--charcoal);
 	background-color: var(--cream);
 	margin: 0px;
+}
+
+.title {
+	font-family: 'Editorial New', serif;
+	font-weight: 200;
+	font-size: 44px;
+	line-height: 1.2;
 }
 
 /* Class to visually hide element, but keep it available for screen readers.
@@ -53,6 +81,9 @@ a:focus {
 }
 
 .btn.primary {
+	font-family: 'General Grotesque', sans-serif;
+	font-weight: 600;
+	font-size: 18px;
 	border: 1px solid var(--charcoal);
 	color: var(--charcoal);
 	background-color: var(--mustard);

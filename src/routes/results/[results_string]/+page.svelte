@@ -4,7 +4,7 @@
 	export let data;
 </script>
 
-<h1>Your Results</h1>
+<h1 class="title">Your Results</h1>
 <main>
 	<SpiderChart answers={data.object} />
 </main>

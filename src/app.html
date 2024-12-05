@@ -1,12 +1,25 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		%sveltekit.head%
-	</head>
-	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents">%sveltekit.body%</div>
-	</body>
+
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!-- Editorial New -->
+	<link rel="preload" href="%sveltekit.assets%/fonts/PPEditorialNew-Ultralight.woff2" type="font/woff2" as="font"
+		crossorigin="anonymous" />
+	<!-- General Grotesque -->
+	<link rel="preload" href="%sveltekit.assets%/fonts/GeneralGrotesque-Book.woff2" type="font/woff2" as="font"
+		crossorigin="anonymous" />
+	<link rel="preload" href="%sveltekit.assets%/fonts/GeneralGrotesque-Demi.woff2" type="font/woff2" as="font"
+		crossorigin="anonymous" />
+	<!-- Adobe Garamond Pro -->
+	<link rel="stylesheet" href="https://use.typekit.net/tef8nwt.css">
+	%sveltekit.head%
+</head>
+
+<body data-sveltekit-preload-data="hover">
+	<div style="display: contents">%sveltekit.body%</div>
+</body>
+
 </html>
