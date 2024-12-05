@@ -125,6 +125,7 @@
 	section.intro {
 		background-image: url('$lib/assets/cloud-hero-layer-1.jpg');
 		background-size: cover;
+		color: var(--cream);
 	}
 	section.intro .content {
 		width: var(--width-large);
@@ -133,19 +134,12 @@
 		position: relative;
 		z-index: 2;
 	}
-	h1 {
-		font-size: 44px;
-		font-weight: 200;
-		font-family: serif;
-		color: var(--cream);
-	}
 	.intro p {
 		text-align: center;
 		font-family: sans-serif;
 		font-size: 20px;
 		font-weight: 300;
 		line-height: 1.5;
-		color: var(--cream);
 		margin-bottom: 40px;
 	}
 	.clouds-overlay-wrapper {
