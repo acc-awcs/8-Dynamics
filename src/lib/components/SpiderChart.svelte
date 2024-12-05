@@ -9,7 +9,7 @@
 	const config = $derived({
 		d: innerWidth > BREAKPOINT ? 500 : innerWidth - 240, // diameter of chart
 		p: 20, // padding each side to allow answer circles to render in svg container
-		labelD: innerWidth > BREAKPOINT ? 160 : 100, // dynamics label text diameter
+		labelD: innerWidth > BREAKPOINT ? 160 : 120, // dynamics label text diameter
 		ticks: [1, 2, 3, 4, 5]
 	});
 
@@ -126,6 +126,22 @@
 		}
 		return points;
 	});
+
+	function mouseOverOrFocus(id: string) {
+		const tooltip = document.getElementById(id)
+		if (tooltip) {
+			tooltip.style.left = '80px'
+			tooltip.style.top = '80px'
+			tooltip.style.visibility = 'visible'
+		}
+	}
+
+	function mouseOutOrBlur(id: string) {
+		const tooltip = document.getElementById(id)
+		if (tooltip) {
+			tooltip.style.visibility = 'hidden'
+		}
+	}
 </script>
 
 <svelte:window bind:innerWidth />
@@ -162,7 +178,20 @@
 				{#if innerWidth >= BREAKPOINT}
 					{label.fullText}
 				{:else}
-					{label.shortText}
+					<div
+						onmouseover={() => mouseOverOrFocus(`tooltip-${idx}`)}
+						onfocus={() => mouseOverOrFocus(`tooltip-${idx}`)}
+						onmouseout={() => mouseOutOrBlur(`tooltip-${idx}`)}
+						onblur={() => mouseOutOrBlur(`tooltip-${idx}`)}
+						role="button"
+						tabindex={idx + 2}
+						class="truncated-label"
+					>
+						{label.shortText}
+					</div>
+					<div id={`tooltip-${idx}`} class="tooltip" role="tooltip">
+						{label.fullText}
+					</div>
 				{/if}
 			</div>
 		{/each}
@@ -217,5 +246,22 @@
 		padding: 1rem;
 		box-sizing: border-box;
 		color: var(--charcoal);
+		cursor: default;
+	}
+	.tooltip {
+		position: absolute;
+		visibility: hidden;	
+		background-color: var(--cream);
+		padding: 8px;
+		color: var(--moss);
+		border: 1px solid var(--moss);
+		border-radius: 8px;
+		text-align: left;
+	}
+	.truncated-label:focus {
+		outline: none;
+		border: 2px solid var(--mustard);
+		border-radius: 10px;
+		padding: 4px
 	}
 </style>
