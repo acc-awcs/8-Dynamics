@@ -75,7 +75,7 @@
 			></div>
 		</div>
 		<div class="content">
-			<h1>8 Dynamics of Climate Engagement</h1>
+			<h1 class="title">8 Dynamics of Climate Engagement</h1>
 			<p>
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lobortis mi arcu, sed iaculis
 				sapien sodales sit amet. Vestibulum magna urna, laoreet vitae ante et, lobortis laoreet
@@ -144,7 +144,7 @@
 		font-family: sans-serif;
 		font-size: 20px;
 		font-weight: 300;
-		line-height: 30px;
+		line-height: 1.5;
 		color: var(--cream);
 		margin-bottom: 40px;
 	}
