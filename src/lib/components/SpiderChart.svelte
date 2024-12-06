@@ -8,8 +8,8 @@
 	let innerWidth = $state(500);
 	const config = $derived({
 		d: innerWidth > BREAKPOINT ? 500 : innerWidth - 240, // diameter of chart
-		p: 20, // padding each side to allow answer circles to render in svg container
-		labelD: innerWidth > BREAKPOINT ? 160 : 100, // dynamics label text diameter
+		p: 40, // padding each side to allow answer circles to render in svg container
+		labelD: 100, // dynamics label text diameter
 		ticks: [1, 2, 3, 4, 5]
 	});
 
@@ -50,14 +50,17 @@
 
 	// `radialTickLines` calculates the lines from center of the octagons to create the web
 	function radialTickLines() {
-		let lines: { outerX: number; outerY: number }[] = [];
+		let lines: { outerX: number; outerY: number; labelX: number; labelY: number }[] = [];
 		for (var i = 0; i < features.length; i++) {
 			let pct = i / features.length;
 			let angle = Math.PI / 2 + 2 * Math.PI * pct;
 			const { x, y } = angleToCoordinate(angle, 5);
+			const lCoord = angleToCoordinate(angle, 6);
 			lines.push({
 				outerX: x,
-				outerY: y
+				outerY: y,
+				labelX: lCoord.x,
+				labelY: lCoord.y
 			});
 		}
 		return lines;
@@ -131,24 +134,25 @@
 <svelte:window bind:innerWidth />
 <div class="outer" style={`padding: ${config.labelD}px;`}>
 	<svg id="chart" width={config.d + 2 * config.p} height={config.d + 2 * config.p}>
+		<path class="answer" stroke-width="3" opacity="0.8" d={drawAnswerShape(answers)} />
 		<g id="ticks">
 			{#each config.ticks as tick}
 				<!-- concentric octogons -->
 				<polygon points={tickToPolygon(tick)} />
 			{/each}
-			{#each radialTickLines() as f}
+			{#each radialTickLines() as f, idx}
 				<line
 					x1={config.p + config.d / 2}
 					y1={config.p + config.d / 2}
 					x2={f.outerX}
 					y2={f.outerY}
 				/>
+				<line class="dash" x1={f.outerX} y1={f.outerY} x2={f.labelX} y2={f.labelY} />
 			{/each}
 		</g>
 		<g id="answer">
-			<path stroke-width="3" opacity="0.8" d={drawAnswerShape(answers)} />
 			{#each formattedAnswers as ans}
-				<circle cx={ans.xCoord} cy={ans.yCoord} r={config.p}></circle>
+				<circle cx={ans.xCoord} cy={ans.yCoord} r="13"></circle>
 				<text x={ans.xCoord - 5} y={ans.yCoord + 3}>{ans.answer}</text>
 			{/each}
 		</g>
@@ -159,11 +163,7 @@
 				class="dynamic"
 				style={`width: ${config.labelD}px; height: ${config.labelD}px; transform: translate(${label.offsetX}px, ${label.offsetY}px)`}
 			>
-				{#if innerWidth >= BREAKPOINT}
-					{label.fullText}
-				{:else}
-					{label.shortText}
-				{/if}
+				{label.shortText}
 			</div>
 		{/each}
 	</div>
@@ -172,7 +172,6 @@
 <style>
 	.outer {
 		position: relative;
-		background-color: var(--cream);
 	}
 	svg {
 		display: block;
@@ -185,17 +184,19 @@
 		fill: none;
 		stroke: var(--charcoal);
 	}
+	line.dash {
+		stroke-dasharray: 1px;
+	}
 
 	/* ANSWER SHAPES */
-	#answer path {
-		fill: var(--moss);
-		stroke: var(--moss);
+	path.answer {
+		fill: var(--cream);
 	}
 	#answer circle {
-		fill: var(--moss);
+		fill: var(--mustard);
 	}
 	#answer text {
-		fill: var(--cream);
+		fill: var(--charcoal);
 	}
 
 	/* LABELS */
