@@ -23,7 +23,8 @@
 				key: 'ABCDEFGH'[idx],
 				dynamic,
 				el: undefined,
-				value: 3
+				value: 3,
+				bgImage: `src/lib/assets/hero-${idx}.png`
 			};
 		})
 	);
@@ -66,12 +67,12 @@
 			<div
 				class="clouds-overlay"
 				style="
-					transform: translate({translateX}px, {translateY}px); 
-					height: {100 + OVERLAY_OFFSET_BOTTOM_PERCENT}vh; 
-					bottom: {-OVERLAY_OFFSET_BOTTOM_PERCENT}vh;
-					width: {100 + OVERLAY_OFFSET_LEFT_PERCENT}%;
-					left: {-OVERLAY_OFFSET_LEFT_PERCENT}%;
-					"
+				transform: translate({translateX}px, {translateY}px); 
+				height: {100 + OVERLAY_OFFSET_BOTTOM_PERCENT}vh; 
+				bottom: {-OVERLAY_OFFSET_BOTTOM_PERCENT}vh;
+				width: {100 + OVERLAY_OFFSET_LEFT_PERCENT}%;
+				left: {-OVERLAY_OFFSET_LEFT_PERCENT}%;
+				"
 			></div>
 		</div>
 		<div class="content">
@@ -86,10 +87,19 @@
 		</div>
 	</section>
 
+	<!-- Allow focus jumping to section to avoid focus styles being applied to input on Safari link click -->
+	<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 	{#each sections as section, index}
-		<!-- Allow focus jumping to section to avoid focus styles being applied to input on Safari link click -->
-		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-		<section id={`section-${index}`} tabindex={-1} bind:this={section.el}>
+		<section
+			id={`section-${index}`}
+			tabindex={-1}
+			bind:this={section.el}
+			style="
+			background-image: url({section.bgImage});
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-position: center;"
+		>
 			<PromptWithSlider
 				bind:value={section.value}
 				{section}

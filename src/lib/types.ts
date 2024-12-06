@@ -3,4 +3,5 @@ export interface Section {
 	dynamic: string;
 	el: HTMLElement | undefined;
 	value: number;
+	bgImage: string;
 }
