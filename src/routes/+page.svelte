@@ -96,7 +96,7 @@
 			bind:this={section.el}
 			style="
 			background-image: url({section.bgImage});
-			background-size: cover;
+			background-size: contain;
 			background-repeat: no-repeat;
 			background-position: center;"
 		>
