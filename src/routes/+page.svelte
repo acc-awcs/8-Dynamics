@@ -2,6 +2,17 @@
 	import PromptWithSlider from '$lib/components/PromptWithSlider.svelte';
 	import type { Section, SectionIllustrations } from '$lib/types';
 	import { onMount } from 'svelte';
+	import hero0Left from '../lib/assets/hero-0-left.png';
+	import hero0Right from '../lib/assets/hero-0-right.png';
+	import hero1Right from '../lib/assets/hero-1-right.png';
+	import hero2Left from '../lib/assets/hero-2-left.png';
+	import hero3Left from '../lib/assets/hero-3-left.png';
+	import hero3Right from '../lib/assets/hero-3-right.png';
+	import hero4Left from '../lib/assets/hero-4-left.png';
+	import hero4Right from '../lib/assets/hero-4-right.png';
+	import hero5Left from '../lib/assets/hero-5-left.png';
+	import hero6Right from '../lib/assets/hero-6-right.png';
+	import hero7Left from '../lib/assets/hero-7-left.png';
 
 	let { data } = $props();
 
@@ -63,61 +74,61 @@
 	const illustrations: Record<number, SectionIllustrations> = {
 		0: {
 			left: {
-				image: 'src/lib/assets/hero-0-left.png',
+				image: hero0Left,
 				className: 'hero-0-left'
 			},
 			right: {
-				image: 'src/lib/assets/hero-0-right.png',
+				image: hero0Right,
 				className: 'hero-0-right'
 			}
 		},
 		1: {
 			right: {
-				image: 'src/lib/assets/hero-1-right.png',
+				image: hero1Right,
 				className: 'hero-1-right'
 			}
 		},
 		2: {
 			left: {
-				image: 'src/lib/assets/hero-2-left.png',
+				image: hero2Left,
 				className: 'hero-2-left'
 			}
 		},
 		3: {
 			left: {
-				image: 'src/lib/assets/hero-3-left.png',
+				image: hero3Left,
 				className: 'hero-3-left'
 			},
 			right: {
-				image: 'src/lib/assets/hero-3-right.png',
+				image: hero3Right,
 				className: 'hero-3-right'
 			}
 		},
 		4: {
 			left: {
-				image: 'src/lib/assets/hero-4-left.png',
+				image: hero4Left,
 				className: 'hero-4-left'
 			},
 			right: {
-				image: 'src/lib/assets/hero-4-right.png',
+				image: hero4Right,
 				className: 'hero-4-right'
 			}
 		},
 		5: {
 			left: {
-				image: 'src/lib/assets/hero-5-left.png',
+				image: hero5Left,
 				className: 'hero-5-left'
 			}
 		},
 		6: {
 			right: {
-				image: 'src/lib/assets/hero-6-right.png',
+				image: hero6Right,
 				className: 'hero-6-right'
 			}
 		},
 		7: {
 			left: {
-				image: 'src/lib/assets/hero-7-left.png',
+				image: hero7Left,
 				className: 'hero-7-left'
 			}
 		}
