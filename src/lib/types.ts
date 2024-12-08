@@ -3,5 +3,15 @@ export interface Section {
 	dynamic: string;
 	el: HTMLElement | undefined;
 	value: number;
-	bgImage: string;
+	bgImages: SectionIllustrations;
 }
+
+type ImageData = {
+	image: string;
+	className: string;
+};
+
+export type SectionIllustrations = {
+	left?: ImageData;
+	right?: ImageData;
+};
