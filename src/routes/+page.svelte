@@ -1,6 +1,18 @@
 <script lang="ts">
 	import PromptWithSlider from '$lib/components/PromptWithSlider.svelte';
-	import type { Section } from '$lib/types';
+	import type { Section, SectionIllustrations } from '$lib/types';
+	import { onMount } from 'svelte';
+	import hero0Left from '../lib/assets/hero-0-left.png';
+	import hero0Right from '../lib/assets/hero-0-right.png';
+	import hero1Right from '../lib/assets/hero-1-right.png';
+	import hero2Left from '../lib/assets/hero-2-left.png';
+	import hero3Left from '../lib/assets/hero-3-left.png';
+	import hero3Right from '../lib/assets/hero-3-right.png';
+	import hero4Left from '../lib/assets/hero-4-left.png';
+	import hero4Right from '../lib/assets/hero-4-right.png';
+	import hero5Left from '../lib/assets/hero-5-left.png';
+	import hero6Right from '../lib/assets/hero-6-right.png';
+	import hero7Left from '../lib/assets/hero-7-left.png';
 
 	let { data } = $props();
 
@@ -17,13 +29,119 @@
 	let translateX = $derived(percentMoved * ((OVERLAY_OFFSET_LEFT_PERCENT / 100) * innerWidth));
 	let translateY = $derived(percentMoved * (-(OVERLAY_OFFSET_BOTTOM_PERCENT / 100) * innerHeight));
 
+	let sectionRefs: HTMLElement[] = [];
+
+	const intersectionCallback = (entries: IntersectionObserverEntry[]) => {
+		entries.forEach((entry) => {
+			const section = entry.target as HTMLElement;
+
+			// Select all images within the current section
+			const images = section.querySelectorAll<HTMLImageElement>('img');
+
+			if (entry.isIntersecting) {
+				// Show images
+				images.forEach((image) => {
+					image.style.transitionDelay = '0s';
+					image.classList.add('visible');
+				});
+			} else {
+				// Hide images
+				images.forEach((image) => {
+					image.classList.remove('visible');
+				});
+			}
+		});
+	};
+
+	onMount(() => {
+		const observer = new IntersectionObserver(intersectionCallback, {
+			threshold: 0.1 // Trigger when 10% of the section is visible
+		});
+
+		sectionRefs.forEach((section) => observer.observe(section));
+
+		return () => {
+			sectionRefs.forEach((section) => observer.unobserve(section));
+		};
+	});
+
+	let storeSection = (el: HTMLElement) => {
+		if (el && !sectionRefs.includes(el)) {
+			sectionRefs.push(el);
+		}
+	};
+
+	const illustrations: Record<number, SectionIllustrations> = {
+		0: {
+			left: {
+				image: hero0Left,
+				className: 'hero-0-left'
+			},
+			right: {
+				image: hero0Right,
+				className: 'hero-0-right'
+			}
+		},
+		1: {
+			right: {
+				image: hero1Right,
+				className: 'hero-1-right'
+			}
+		},
+		2: {
+			left: {
+				image: hero2Left,
+				className: 'hero-2-left'
+			}
+		},
+		3: {
+			left: {
+				image: hero3Left,
+				className: 'hero-3-left'
+			},
+			right: {
+				image: hero3Right,
+				className: 'hero-3-right'
+			}
+		},
+		4: {
+			left: {
+				image: hero4Left,
+				className: 'hero-4-left'
+			},
+			right: {
+				image: hero4Right,
+				className: 'hero-4-right'
+			}
+		},
+		5: {
+			left: {
+				image: hero5Left,
+				className: 'hero-5-left'
+			}
+		},
+		6: {
+			right: {
+				image: hero6Right,
+				className: 'hero-6-right'
+			}
+		},
+		7: {
+			left: {
+				image: hero7Left,
+				className: 'hero-7-left'
+			}
+		}
+	};
+
 	const sections: Section[] = $state(
 		data.dynamics.map(({ full: dynamic }, idx) => {
 			return {
 				key: 'ABCDEFGH'[idx],
 				dynamic,
 				el: undefined,
-				value: 3
+				value: 3,
+				bgImages: illustrations[idx]
 			};
 		})
 	);
@@ -89,7 +207,33 @@
 	{#each sections as section, index}
 		<!-- Allow focus jumping to section to avoid focus styles being applied to input on Safari link click -->
 		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-		<section id={`section-${index}`} tabindex={-1} bind:this={section.el}>
+		<section id={`section-${index}`} tabindex={-1} bind:this={section.el} use:storeSection>
+			<div
+				style="height: 100vh;
+					width: 100%;
+					z-index: -2;
+					position: fixed;
+					top: 0;
+					left: 0;
+					display: flex;"
+			>
+				{#if section.bgImages.left}
+					<img
+						src={section.bgImages.left.image}
+						class={`hero-${index}-left`}
+						style="position: fixed; left: 0"
+						alt={`section-${index}-left-image`}
+					/>
+				{/if}
+				{#if section.bgImages.right}
+					<img
+						src={section.bgImages.right.image}
+						class={`hero-${index}-right`}
+						style="position: fixed; right: 0;"
+						alt={`section-${index}-right-image`}
+					/>
+				{/if}
+			</div>
 			<PromptWithSlider
 				bind:value={section.value}
 				{section}
@@ -154,5 +298,32 @@
 		background-image: url('$lib/assets/cloud-hero-layer-2.png');
 		position: absolute;
 		transition: transform 0.1s linear;
+	}
+	/* reducing the opacing when the images overlap with the section text
+	for better readability */
+	@media (max-width: 850px) {
+		img.visible {
+			opacity: 0.5;
+			transform: translateY(0);
+		}
+	}
+	@media (min-width: 851px) {
+		img.visible {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	img {
+		opacity: 0;
+		transition:
+			opacity 0.6s ease,
+			transform 0.6s ease;
+		transform: translateY(20px);
+	}
+	/* preventing the images from getting cropped on the bottom*/
+	.hero-0-right,
+	.hero-3-right,
+	.hero-4-left {
+		bottom: 0;
 	}
 </style>

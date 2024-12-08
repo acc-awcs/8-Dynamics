@@ -94,7 +94,6 @@
 		display: flex;
 		align-items: center;
 		padding: 10px 16px;
-		border: 4px solid var(--cream);
 		margin: -14px -20px;
 		border-radius: 28px;
 		transition: border 0.2s linear;
