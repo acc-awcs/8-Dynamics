@@ -1,8 +1,15 @@
 <script lang="ts">
 	import SpiderChart from '$lib/components/SpiderChart.svelte';
 	import dynamics from '$lib/dynamics';
+	import { _sendEmail } from './+page';
 
 	export let data;
+	let email = '';
+
+	function handleEmailChange(evt: Event): void {
+		const input = evt.target as HTMLInputElement;
+		email = input.value;
+	}
 </script>
 
 <main>
@@ -15,6 +22,16 @@
 			<li>{dynamic.full}</li>
 		{/each}
 	</ol>
+	<div>Send a copy of your results:</div>
+	<form
+		on:submit={() => {
+			_sendEmail();
+		}}
+	>
+		<input value={email} on:input={handleEmailChange} placeholder="Email address" />
+		<!-- TODO: email validation -->
+		<button type="submit">Submit</button>
+	</form>
 </main>
 
 <style>

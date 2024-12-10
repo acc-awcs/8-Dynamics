@@ -19,5 +19,23 @@ export function load({ params }: { params: { results_string: string } }) {
 	};
 }
 
+export async function _sendEmail() {
+	try {
+		const response = await fetch('/api/send-results', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({})
+		});
+
+		if (!response.ok) {
+			// handle error
+		}
+	} catch (err) {
+		console.error('Error: could not send email');
+	}
+}
+
 export const csr = true;
 export const prerender = false;
