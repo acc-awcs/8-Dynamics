@@ -6,12 +6,7 @@ export interface Section {
 	bgImages: SectionIllustrations;
 }
 
-type ImageData = {
-	image: string;
-	className: string;
-};
-
 export type SectionIllustrations = {
-	left?: ImageData;
-	right?: ImageData;
+	left?: string;
+	right?: string;
 };

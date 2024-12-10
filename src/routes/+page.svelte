@@ -73,64 +73,31 @@
 
 	const illustrations: Record<number, SectionIllustrations> = {
 		0: {
-			left: {
-				image: hero0Left,
-				className: 'hero-0-left'
-			},
-			right: {
-				image: hero0Right,
-				className: 'hero-0-right'
-			}
+			left: hero0Left,
+			right: hero0Right
 		},
 		1: {
-			right: {
-				image: hero1Right,
-				className: 'hero-1-right'
-			}
+			right: hero1Right
 		},
 		2: {
-			left: {
-				image: hero2Left,
-				className: 'hero-2-left'
-			}
+			left: hero2Left
 		},
 		3: {
-			left: {
-				image: hero3Left,
-				className: 'hero-3-left'
-			},
-			right: {
-				image: hero3Right,
-				className: 'hero-3-right'
-			}
+			left: hero3Left,
+			right: hero3Right
 		},
 		4: {
-			left: {
-				image: hero4Left,
-				className: 'hero-4-left'
-			},
-			right: {
-				image: hero4Right,
-				className: 'hero-4-right'
-			}
+			left: hero4Left,
+			right: hero4Right
 		},
 		5: {
-			left: {
-				image: hero5Left,
-				className: 'hero-5-left'
-			}
+			left: hero5Left
 		},
 		6: {
-			right: {
-				image: hero6Right,
-				className: 'hero-6-right'
-			}
+			right: hero6Right
 		},
 		7: {
-			left: {
-				image: hero7Left,
-				className: 'hero-7-left'
-			}
+			left: hero7Left
 		}
 	};
 
@@ -219,18 +186,18 @@
 			>
 				{#if section.bgImages.left}
 					<img
-						src={section.bgImages.left.image}
+						src={section.bgImages.left}
 						class={`hero-${index}-left`}
 						style="position: fixed; left: 0"
-						alt={`section-${index}-left-image`}
+						alt=""
 					/>
 				{/if}
 				{#if section.bgImages.right}
 					<img
-						src={section.bgImages.right.image}
+						src={section.bgImages.right}
 						class={`hero-${index}-right`}
 						style="position: fixed; right: 0;"
-						alt={`section-${index}-right-image`}
+						alt=""
 					/>
 				{/if}
 			</div>
@@ -299,18 +266,14 @@
 		position: absolute;
 		transition: transform 0.1s linear;
 	}
+	img.visible {
+		opacity: 1;
+	}
 	/* reducing the opacing when the images overlap with the section text
 	for better readability */
 	@media (max-width: 850px) {
 		img.visible {
 			opacity: 0.5;
-			transform: translateY(0);
-		}
-	}
-	@media (min-width: 851px) {
-		img.visible {
-			opacity: 1;
-			transform: translateY(0);
 		}
 	}
 	img {
