@@ -227,7 +227,6 @@
 		position: fixed;
 		left: 0;
 	}
-
 	.hero-0-right,
 	.hero-1-right,
 	.hero-2-right,
@@ -238,6 +237,12 @@
 	.hero-7-right {
 		position: fixed;
 		right: 0;
+	}
+	/* preventing the images from getting cropped on the bottom*/
+	.hero-0-right,
+	.hero-3-right,
+	.hero-4-left {
+		bottom: 0;
 	}
 	img.visible {
 		opacity: 1;
@@ -255,11 +260,5 @@
 			opacity 0.6s ease,
 			transform 0.6s ease;
 		transform: translateY(20px);
-	}
-	/* preventing the images from getting cropped on the bottom*/
-	.hero-0-right,
-	.hero-3-right,
-	.hero-4-left {
-		bottom: 0;
 	}
 </style>
