@@ -1,18 +1,8 @@
 <script lang="ts">
 	import PromptWithSlider from '$lib/components/PromptWithSlider.svelte';
-	import type { Section, SectionIllustrations } from '$lib/types';
+	import type { Section } from '$lib/types';
 	import { onMount } from 'svelte';
-	import hero0Left from '../lib/assets/hero-0-left.png';
-	import hero0Right from '../lib/assets/hero-0-right.png';
-	import hero1Right from '../lib/assets/hero-1-right.png';
-	import hero2Left from '../lib/assets/hero-2-left.png';
-	import hero3Left from '../lib/assets/hero-3-left.png';
-	import hero3Right from '../lib/assets/hero-3-right.png';
-	import hero4Left from '../lib/assets/hero-4-left.png';
-	import hero4Right from '../lib/assets/hero-4-right.png';
-	import hero5Left from '../lib/assets/hero-5-left.png';
-	import hero6Right from '../lib/assets/hero-6-right.png';
-	import hero7Left from '../lib/assets/hero-7-left.png';
+	import illustrations from '$lib/illustrations';
 
 	let { data } = $props();
 
@@ -41,7 +31,6 @@
 			if (entry.isIntersecting) {
 				// Show images
 				images.forEach((image) => {
-					image.style.transitionDelay = '0s';
 					image.classList.add('visible');
 				});
 			} else {
@@ -68,36 +57,6 @@
 	let storeSection = (el: HTMLElement) => {
 		if (el && !sectionRefs.includes(el)) {
 			sectionRefs.push(el);
-		}
-	};
-
-	const illustrations: Record<number, SectionIllustrations> = {
-		0: {
-			left: hero0Left,
-			right: hero0Right
-		},
-		1: {
-			right: hero1Right
-		},
-		2: {
-			left: hero2Left
-		},
-		3: {
-			left: hero3Left,
-			right: hero3Right
-		},
-		4: {
-			left: hero4Left,
-			right: hero4Right
-		},
-		5: {
-			left: hero5Left
-		},
-		6: {
-			right: hero6Right
-		},
-		7: {
-			left: hero7Left
 		}
 	};
 
@@ -175,30 +134,12 @@
 		<!-- Allow focus jumping to section to avoid focus styles being applied to input on Safari link click -->
 		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 		<section id={`section-${index}`} tabindex={-1} bind:this={section.el} use:storeSection>
-			<div
-				style="height: 100vh;
-					width: 100%;
-					z-index: -2;
-					position: fixed;
-					top: 0;
-					left: 0;
-					display: flex;"
-			>
+			<div class="illustrations-wrapper">
 				{#if section.bgImages.left}
-					<img
-						src={section.bgImages.left}
-						class={`hero-${index}-left`}
-						style="position: fixed; left: 0"
-						alt=""
-					/>
+					<img src={section.bgImages.left} class={`hero-${index}-left`} alt="" />
 				{/if}
 				{#if section.bgImages.right}
-					<img
-						src={section.bgImages.right}
-						class={`hero-${index}-right`}
-						style="position: fixed; right: 0;"
-						alt=""
-					/>
+					<img src={section.bgImages.right} class={`hero-${index}-right`} alt="" />
 				{/if}
 			</div>
 			<PromptWithSlider
@@ -265,6 +206,38 @@
 		background-image: url('$lib/assets/cloud-hero-layer-2.png');
 		position: absolute;
 		transition: transform 0.1s linear;
+	}
+	.illustrations-wrapper {
+		height: 100vh;
+		width: 100%;
+		z-index: -2;
+		position: fixed;
+		top: 0;
+		left: 0;
+		display: flex;
+	}
+	.hero-0-left,
+	.hero-1-left,
+	.hero-2-left,
+	.hero-3-left,
+	.hero-4-left,
+	.hero-5-left,
+	.hero-6-left,
+	.hero-7-left {
+		position: fixed;
+		left: 0;
+	}
+
+	.hero-0-right,
+	.hero-1-right,
+	.hero-2-right,
+	.hero-3-right,
+	.hero-4-right,
+	.hero-5-right,
+	.hero-6-right,
+	.hero-7-right {
+		position: fixed;
+		right: 0;
 	}
 	img.visible {
 		opacity: 1;
