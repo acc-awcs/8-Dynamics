@@ -175,7 +175,7 @@
 
 	text {
 		/* all <text> elements live inside a circle */
-		transform: translate(-3px, 4px);
+		transform: translate(-4px, 3px);
 	}
 	/* LABELS */
 	.label text {
