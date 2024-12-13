@@ -7,6 +7,7 @@
 	let { data } = $props();
 	let highlight = $state(0);
 	let intervalId = $state<number>();
+	let chartWidth = $state(500);
 
 	function rotateSelected() {
 		let selected = highlight + 1;
@@ -29,13 +30,16 @@
 
 <main>
 	<h1 class="title">Your Results</h1>
-	<div class="chart">
-		<SpiderChart answers={data.object} {highlight} />
+	<div class="chart" aria-hidden="true" bind:clientWidth={chartWidth}>
+		<SpiderChart answers={data.object} {highlight} {chartWidth} />
 	</div>
 	<div class="results">
 		<ol>
 			{#each dynamics as dynamic, idx}
-				<li class:highlight={idx === highlight}>{dynamic.full}</li>
+				<li class:highlight={idx === highlight}>
+					{dynamic.full}
+					<span class="visually-hidden">Your answer: {data.answers[idx].value} out of 5</span>
+				</li>
 			{/each}
 		</ol>
 		<div class="next-steps">
@@ -65,6 +69,7 @@
 		position: relative;
 		grid-template-columns: 1fr minmax(400px, 1fr);
 		grid-template-rows: min-content 1fr;
+		gap: 1em 3em;
 		background-image: url('$lib/assets/cloud-1.png'), url('$lib/assets/cloud-4.png'),
 			url('$lib/assets/cloud-5.png');
 		background-repeat: no-repeat, no-repeat, no-repeat;

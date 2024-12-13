@@ -1,20 +1,23 @@
 <script lang="ts">
 	import { line, scaleLinear } from 'd3';
-	let { answers }: { answers: Record<string, number> } = $props();
+	let {
+		answers,
+		highlight,
+		chartWidth
+	}: { answers: Record<string, number>; highlight: number; chartWidth: number } = $props();
 
-	const BREAKPOINT = 800;
 	const features = $derived(Object.keys(answers));
-	let innerWidth = $state(500);
+
 	const config = $derived({
-		d: innerWidth > BREAKPOINT ? 500 : innerWidth - 240, // diameter of chart
-		p: 80, // padding each side to allow answer circles to render in svg container
+		d: chartWidth, // diameter of chart
 		labelRadius: 13, // radius of label circles
 		ticks: [1, 2, 3, 4, 5]
 	});
 
 	let radialScale = $derived(
 		scaleLinear()
-			.domain([0, 5])
+			// domain includes labels position
+			.domain([0, 6.5])
 			.range([0, config.d / 2])
 	);
 
@@ -28,7 +31,7 @@
 		// multiplying by -1 makes the math count clockwise
 		let x = Math.cos(angle) * radialScale(value) * -1;
 		let y = Math.sin(angle) * radialScale(value);
-		return { x: config.p + (config.d / 2 + x), y: config.p + (config.d / 2 - y) };
+		return { x: config.d / 2 + x, y: config.d / 2 - y };
 	}
 
 	// Method for drawing non-circle tick mark
@@ -107,9 +110,8 @@
 	);
 </script>
 
-<svelte:window bind:innerWidth />
 <div class="outer">
-	<svg id="chart" width={config.d + 2 * config.p} height={config.d + 2 * config.p}>
+	<svg id="chart" width={config.d} height={config.d}>
 		<path class="answer" stroke-width="3" opacity="0.8" d={drawAnswerShape(answers)} />
 		<g id="ticks">
 			{#each config.ticks as tick}
@@ -117,12 +119,7 @@
 				<polygon points={tickToPolygon(tick)} />
 			{/each}
 			{#each radialTickLines as f, idx}
-				<line
-					x1={config.p + config.d / 2}
-					y1={config.p + config.d / 2}
-					x2={f.outerX}
-					y2={f.outerY}
-				/>
+				<line x1={config.d / 2} y1={config.d / 2} x2={f.outerX} y2={f.outerY} />
 				<line class="dash" x1={f.outerX} y1={f.outerY} x2={f.labelX} y2={f.labelY} />
 				<g class="label" class:highlight={highlight === idx}>
 					<circle
@@ -133,7 +130,7 @@
 						stroke-width="1"
 					>
 					</circle>
-					<text class="label" x={f.labelX} y={f.labelY}>{idx + 1}</text>
+					<text x={f.labelX} y={f.labelY}>{idx + 1}</text>
 				</g>
 			{/each}
 		</g>
