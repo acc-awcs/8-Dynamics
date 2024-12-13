@@ -73,11 +73,15 @@ a:focus {
 }
 
 .btn {
+	font-size: 14px;
 	font-weight: 600;
 	text-decoration: none;
 	border-radius: 50px;
 	padding: 16px 30px;
 	transition: all 0.1s linear;
+	/* fixes for discrepancies between .btn on <a> and <button> */
+	font: inherit;
+	text-align: center;
 }
 
 .btn.primary {
