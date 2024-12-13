@@ -1,5 +1,4 @@
 <script lang="ts">
-	import dynamics from '$lib/dynamics';
 	import { line, scaleLinear } from 'd3';
 	let { answers }: { answers: Record<string, number> } = $props();
 
@@ -8,8 +7,8 @@
 	let innerWidth = $state(500);
 	const config = $derived({
 		d: innerWidth > BREAKPOINT ? 500 : innerWidth - 240, // diameter of chart
-		p: 40, // padding each side to allow answer circles to render in svg container
-		labelD: 100, // dynamics label text diameter
+		p: 80, // padding each side to allow answer circles to render in svg container
+		labelRadius: 13, // radius of label circles
 		ticks: [1, 2, 3, 4, 5]
 	});
 
@@ -49,7 +48,7 @@
 	}
 
 	// `radialTickLines` calculates the lines from center of the octagons to create the web
-	function radialTickLines() {
+	const radialTickLines = $derived.by(() => {
 		let lines: { outerX: number; outerY: number; labelX: number; labelY: number }[] = [];
 		for (var i = 0; i < features.length; i++) {
 			let pct = i / features.length;
@@ -64,7 +63,7 @@
 			});
 		}
 		return lines;
-	}
+	});
 
 	function drawAnswerShape(answers: Record<string, number>): string | null {
 		let coordinates: [number, number][] = [];
@@ -106,33 +105,10 @@
 			[]
 		)
 	);
-
-	// calculates the offset of each label's centerpoint from the center of the chart
-	let labels = $derived.by(() => {
-		const numPoints = features.length;
-		const points = [];
-		const angleStep = (2 * Math.PI) / numPoints;
-		// not using radialScale because we want a radius outside those bounds
-		const radius = config.d / 2 + config.p + config.labelD / 2;
-
-		for (let i = 0; i < numPoints; i++) {
-			const angle = i * angleStep;
-			const x = radius * Math.sin(angle);
-			// multiply y by -1 so it maps clockwise
-			const y = radius * Math.cos(angle) * -1;
-			points.push({
-				offsetX: x,
-				offsetY: y,
-				fullText: dynamics[i].full,
-				shortText: dynamics[i].short
-			});
-		}
-		return points;
-	});
 </script>
 
 <svelte:window bind:innerWidth />
-<div class="outer" style={`padding: ${config.labelD}px;`}>
+<div class="outer">
 	<svg id="chart" width={config.d + 2 * config.p} height={config.d + 2 * config.p}>
 		<path class="answer" stroke-width="3" opacity="0.8" d={drawAnswerShape(answers)} />
 		<g id="ticks">
@@ -140,7 +116,7 @@
 				<!-- concentric octogons -->
 				<polygon points={tickToPolygon(tick)} />
 			{/each}
-			{#each radialTickLines() as f, idx}
+			{#each radialTickLines as f, idx}
 				<line
 					x1={config.p + config.d / 2}
 					y1={config.p + config.d / 2}
@@ -148,25 +124,26 @@
 					y2={f.outerY}
 				/>
 				<line class="dash" x1={f.outerX} y1={f.outerY} x2={f.labelX} y2={f.labelY} />
+				<g class="label">
+					<circle
+						cx={f.labelX}
+						cy={f.labelY}
+						r={config.labelRadius}
+						stroke="black"
+						stroke-width="1"
+					>
+					</circle>
+					<text class="label" x={f.labelX} y={f.labelY}>{idx + 1}</text>
+				</g>
 			{/each}
 		</g>
 		<g id="answer">
 			{#each formattedAnswers as ans}
-				<circle cx={ans.xCoord} cy={ans.yCoord} r="13"></circle>
-				<text x={ans.xCoord - 5} y={ans.yCoord + 3}>{ans.answer}</text>
+				<circle cx={ans.xCoord} cy={ans.yCoord} r={config.labelRadius}></circle>
+				<text x={ans.xCoord} y={ans.yCoord}>{ans.answer}</text>
 			{/each}
 		</g>
 	</svg>
-	<div class="labels-container" style={`width: ${config.labelD}px; height: ${config.labelD}px;`}>
-		{#each labels as label, idx}
-			<div
-				class="dynamic"
-				style={`width: ${config.labelD}px; height: ${config.labelD}px; transform: translate(${label.offsetX}px, ${label.offsetY}px)`}
-			>
-				{label.shortText}
-			</div>
-		{/each}
-	</div>
 </div>
 
 <style>
@@ -199,24 +176,17 @@
 		fill: var(--charcoal);
 	}
 
-	/* LABELS */
-	.labels-container {
-		position: absolute;
-		display: block;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		transform-origin: center;
+	text {
+		/* all <text> elements live inside a circle */
+		transform: translate(-3px, 4px);
 	}
-	.dynamic {
-		position: absolute;
-		border-radius: 50%;
+	/* LABELS */
+	.label text {
+		fill: black;
 		text-align: center;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 1rem;
-		box-sizing: border-box;
-		color: var(--charcoal);
+	}
+	.label circle {
+		fill: var(--sky);
+		transition: fill 0.2s linear;
 	}
 </style>
