@@ -124,7 +124,7 @@
 					y2={f.outerY}
 				/>
 				<line class="dash" x1={f.outerX} y1={f.outerY} x2={f.labelX} y2={f.labelY} />
-				<g class="label">
+				<g class="label" class:highlight={highlight === idx}>
 					<circle
 						cx={f.labelX}
 						cy={f.labelY}
@@ -188,5 +188,11 @@
 	.label circle {
 		fill: var(--sky);
 		transition: fill 0.2s linear;
+	}
+	.label.highlight circle {
+		fill: black;
+	}
+	.label.highlight text {
+		fill: white;
 	}
 </style>
