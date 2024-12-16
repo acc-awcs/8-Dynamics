@@ -1,8 +1,12 @@
 <script>
 	import { page } from '$app/stores';
+	import Logo from '$lib/components/Logo.svelte';
 </script>
 
 <main>
+	<div class="logo-wrapper">
+		<Logo />
+	</div>
 	<section>
 		{#if $page.status === 404}
 			<h1 class="title">404</h1>
@@ -17,6 +21,11 @@
 </main>
 
 <style>
+	.logo-wrapper {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+	}
 	main {
 		background-color: var(--sky);
 		padding: 3rem;
