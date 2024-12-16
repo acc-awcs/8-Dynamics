@@ -204,8 +204,13 @@
 		overflow: hidden;
 	}
 	.clouds-overlay {
-		background-size: cover;
-		background-image: url('$lib/assets/cloud-hero-layer-2.png');
+		background-size: 70%, 100%;
+		background-image: url('$lib/assets/cloud-hero-layer-2-top.png'),
+			url('$lib/assets/cloud-hero-layer-2-bottom.png');
+		background-position:
+			top right,
+			bottom center;
+		background-repeat: no-repeat, no-repeat;
 		position: absolute;
 		transition: transform 0.1s linear;
 	}
