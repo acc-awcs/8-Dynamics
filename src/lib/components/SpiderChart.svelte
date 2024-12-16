@@ -3,8 +3,16 @@
 	let {
 		answers,
 		highlight,
-		chartWidth
-	}: { answers: Record<string, number>; highlight: number; chartWidth: number } = $props();
+		chartWidth,
+		onHover,
+		onLeave
+	}: {
+		answers: Record<string, number>;
+		highlight: number;
+		chartWidth: number;
+		onHover: CallableFunction;
+		onLeave: CallableFunction;
+	} = $props();
 
 	const features = $derived(Object.keys(answers));
 
@@ -122,6 +130,10 @@
 				<line x1={config.d / 2} y1={config.d / 2} x2={f.outerX} y2={f.outerY} />
 				<line class="dash" x1={f.outerX} y1={f.outerY} x2={f.labelX} y2={f.labelY} />
 				<g class="label" class:highlight={highlight === idx}>
+					<!-- onmouseenter={() => onHover(idx)}
+					onmouseleave={() => onLeave()}
+					tabindex={idx + 1}
+					role="button" -->
 					<circle
 						cx={f.labelX}
 						cy={f.labelY}
