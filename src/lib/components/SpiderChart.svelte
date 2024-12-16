@@ -119,7 +119,7 @@
 </script>
 
 <div class="outer">
-	<svg id="chart" width={config.d} height={config.d}>
+	<svg id="chart" width={config.d} height={config.d} aria-hidden="true">
 		<path class="answer" stroke-width="3" opacity="0.8" d={drawAnswerShape(answers)} />
 		<g id="ticks">
 			{#each config.ticks as tick}
@@ -129,11 +129,14 @@
 			{#each radialTickLines as f, idx}
 				<line x1={config.d / 2} y1={config.d / 2} x2={f.outerX} y2={f.outerY} />
 				<line class="dash" x1={f.outerX} y1={f.outerY} x2={f.labelX} y2={f.labelY} />
-				<g class="label" class:highlight={highlight === idx}>
-					<!-- onmouseenter={() => onHover(idx)}
+				<g
+					class="label"
+					class:highlight={highlight === idx}
+					ontouchstart={() => onHover(idx)}
+					onmouseenter={() => onHover(idx)}
 					onmouseleave={() => onLeave()}
-					tabindex={idx + 1}
-					role="button" -->
+					aria-hidden="true"
+				>
 					<circle
 						cx={f.labelX}
 						cy={f.labelY}

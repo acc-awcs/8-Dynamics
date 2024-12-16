@@ -30,9 +30,6 @@
 		highlight = select;
 		stopRotate();
 	}
-	function onLeave() {
-		startRotate();
-	}
 
 	onMount(() => {
 		if (innerWidth >= BREAKPOINT) {
@@ -46,9 +43,9 @@
 
 <svelte:window bind:innerWidth />
 <div class="outer">
-	<div class="logo">
+	<header class="logo">
 		<Logo />
-	</div>
+	</header>
 	<main>
 		<h1 class="title">Your Results</h1>
 		<div class="chart" aria-hidden="true" bind:clientWidth={chartWidth}>
@@ -58,10 +55,8 @@
 			<DynamicSlider
 				{highlight}
 				answers={data.answers.map((a) => a.value)}
-				setHighlight={(idx: number) => {
-					highlight = idx;
-				}}
-				continueRotate={startRotate}
+				{onHover}
+				onLeave={startRotate}
 			/>
 
 			<div class="next-steps">
@@ -144,6 +139,8 @@
 	.actions {
 		margin-top: 1.2em;
 		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
 		gap: 1.5em;
 	}
 	ul {
@@ -179,6 +176,10 @@
 	@media screen and (min-width: 900px) {
 		main {
 			display: grid;
+		}
+		.actions {
+			flex-wrap: nowrap;
+			justify-content: flex-start;
 		}
 	}
 </style>

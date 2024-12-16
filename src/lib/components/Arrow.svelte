@@ -10,14 +10,8 @@
 	}
 </script>
 
-<button onclick={handleClick}>
+<button onclick={handleClick} aria-label={direction === 'left' ? 'Previous' : 'Next'}>
 	<svg class:left={direction === 'left'} viewBox="0 0 44 18" xmlns="http://www.w3.org/2000/svg">
-		<!-- Fallback/A11y text -->
-		{#if direction === 'left'}
-			Previous
-		{:else}
-			Next
-		{/if}
 		<path d="M34.1477 1.39111L41.9321 9.17551L34.1477 16.9599"></path>
 		<path d="M1.19088 9.16982H40.6755"></path>
 	</svg>

@@ -5,18 +5,18 @@
 	let {
 		highlight = 0,
 		answers,
-		setHighlight,
-		continueRotate
+		onHover,
+		onLeave
 	}: {
 		highlight: number;
 		answers: string[];
-		setHighlight: CallableFunction;
-		continueRotate: CallableFunction;
+		onHover: CallableFunction;
+		onLeave: CallableFunction;
 	} = $props();
 
 	function onArrowClick(delta: number) {
 		const selected = rotateDynamic(highlight, delta);
-		setHighlight(selected);
+		onHover(selected);
 	}
 </script>
 
@@ -34,10 +34,12 @@
 <!-- non-mobile -->
 <ol>
 	{#each dynamics as dynamic, idx}
-		<li class:highlight={idx === highlight}>
-			onmouseenter={() => setHighlight(idx)}
-			onpress={() => setHighlight(idx)}
-			onmouseleave={continueRotate}
+		<li
+			class:highlight={idx === highlight}
+			ontouchstart={() => onHover(idx)}
+			onmouseenter={() => onHover(idx)}
+			onmouseleave={() => onLeave()}
+		>
 			{dynamic.full}
 			<span class="visually-hidden">Your answer: {answers[idx]} out of 5</span>
 		</li>
