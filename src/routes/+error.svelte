@@ -12,7 +12,7 @@
 			<p>Something went wrong. Let's try that again.</p>
 		{/if}
 
-		<a href="/" class="btn secondary">Return to the tool</a>
+		<a href="/" class="btn secondary">Return to the Tool</a>
 	</section>
 </main>
 
@@ -53,8 +53,8 @@
 	}
 
 	h1 {
-		font-size: 64px;
+		font-size: 72px;
 		margin-top: 0px;
-		margin-bottom: 40px;
+		margin-bottom: 25px;
 	}
 </style>
