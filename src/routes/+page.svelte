@@ -106,7 +106,7 @@
 <svelte:window bind:innerWidth bind:innerHeight />
 
 <main onscroll={(e) => (scrollY = (e.target as HTMLElement)?.scrollTop)}>
-	<Logo hex="#FFFAF5" />
+	<Logo onDark={true} />
 	<section class="intro">
 		<div class="clouds-overlay-wrapper">
 			<div
