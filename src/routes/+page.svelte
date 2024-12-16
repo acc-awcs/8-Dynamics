@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PromptWithSlider from '$lib/components/PromptWithSlider.svelte';
+	import Logo from '$lib/components/Logo.svelte';
 	import type { Section } from '$lib/types';
 	import { onMount } from 'svelte';
 	import illustrations from '$lib/illustrations';
@@ -105,6 +106,7 @@
 <svelte:window bind:innerWidth bind:innerHeight />
 
 <main onscroll={(e) => (scrollY = (e.target as HTMLElement)?.scrollTop)}>
+	<Logo hex="#FFFAF5" />
 	<section class="intro">
 		<div class="clouds-overlay-wrapper">
 			<div
