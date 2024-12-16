@@ -16,8 +16,14 @@
 /* Custom fonts */
 @font-face {
 	font-family: 'General Grotesque';
-	src: url('/fonts/GeneralGrotesque-Book.woff2') format('woff2');
+	src: url('/fonts/GeneralGrotesque-Light.woff2') format('woff2');
 	font-weight: 300;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'General Grotesque';
+	src: url('/fonts/GeneralGrotesque-Book.woff2') format('woff2');
+	font-weight: 400;
 	font-style: normal;
 }
 @font-face {
@@ -80,7 +86,7 @@ a:focus {
 	padding: 16px 30px;
 	transition: all 0.1s linear;
 	/* fixes for discrepancies between .btn on <a> and <button> */
-	font: inherit;
+	font-family: inherit;
 	text-align: center;
 }
 
