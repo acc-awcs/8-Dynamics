@@ -98,5 +98,6 @@
 		left: 30;
 		top: 30;
 		padding: 20px;
+		z-index: 10;
 	}
 </style>

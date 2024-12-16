@@ -73,7 +73,11 @@
 			href="https://github.com/chelshaw"
 			target="_blank"
 			rel="noopener nofollow">Chelsea Shaw</a
-		>, Emi Jackson, and Helen Li brought this interactive tool to life.
+		>,
+		<a href="https://github.com/emikjackson" target="_blank" rel="noopener nofollow">Emi Jackson</a
+		>, and
+		<a href="https://github.com/li-helen" target="_blank" rel="noopener nofollow">Helen Li</a> brought
+		this interactive tool to life.
 	</footer>
 </div>
 
