@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PromptWithSlider from '$lib/components/PromptWithSlider.svelte';
+	import Logo from '$lib/components/Logo.svelte';
 	import type { Section } from '$lib/types';
 	import { onMount } from 'svelte';
 	import illustrations from '$lib/illustrations';
@@ -105,6 +106,7 @@
 <svelte:window bind:innerWidth bind:innerHeight />
 
 <main onscroll={(e) => (scrollY = (e.target as HTMLElement)?.scrollTop)}>
+	<Logo onDark={true} />
 	<section class="intro">
 		<div class="clouds-overlay-wrapper">
 			<div
@@ -202,8 +204,13 @@
 		overflow: hidden;
 	}
 	.clouds-overlay {
-		background-size: cover;
-		background-image: url('$lib/assets/cloud-hero-layer-2.png');
+		background-size: 80%, 100%;
+		background-image: url('$lib/assets/cloud-hero-layer-2-top.png'),
+			url('$lib/assets/cloud-hero-layer-2-bottom.png');
+		background-position:
+			top right,
+			bottom center;
+		background-repeat: no-repeat, no-repeat;
 		position: absolute;
 		transition: transform 0.1s linear;
 	}
@@ -247,11 +254,18 @@
 	img.visible {
 		opacity: 1;
 	}
-	/* reducing the opacing when the images overlap with the section text
-	for better readability */
 	@media (max-width: 850px) {
+		/* reducing the opacing when the images overlap with the section text
+		for better readability */
 		img.visible {
 			opacity: 0.5;
+		}
+		/* ensure top clouds don't overlap with logo */
+		.clouds-overlay {
+			background-size: 120%, 100%;
+			background-position:
+				top left 200px,
+				bottom center;
 		}
 	}
 	img {
