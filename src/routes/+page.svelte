@@ -204,7 +204,7 @@
 		overflow: hidden;
 	}
 	.clouds-overlay {
-		background-size: 70%, 100%;
+		background-size: 80%, 100%;
 		background-image: url('$lib/assets/cloud-hero-layer-2-top.png'),
 			url('$lib/assets/cloud-hero-layer-2-bottom.png');
 		background-position:
@@ -254,11 +254,18 @@
 	img.visible {
 		opacity: 1;
 	}
-	/* reducing the opacing when the images overlap with the section text
-	for better readability */
 	@media (max-width: 850px) {
+		/* reducing the opacing when the images overlap with the section text
+		for better readability */
 		img.visible {
 			opacity: 0.5;
+		}
+		/* ensure top clouds don't overlap with logo */
+		.clouds-overlay {
+			background-size: 120%, 100%;
+			background-position:
+				top left 200px,
+				bottom center;
 		}
 	}
 	img {
