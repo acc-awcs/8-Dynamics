@@ -15,6 +15,10 @@
 	let chartWidth = $state(500);
 
 	function startRotate() {
+		if (innerWidth < BREAKPOINT) {
+			// If the screen is mobile width, we don't want to automatically highlight the dynamics
+			return;
+		}
 		if (!intervalId) {
 			intervalId = setInterval(() => {
 				highlight = rotateDynamic(highlight, 1);
@@ -32,9 +36,7 @@
 	}
 
 	onMount(() => {
-		if (innerWidth >= BREAKPOINT) {
-			startRotate();
-		}
+		startRotate();
 	});
 	onDestroy(() => {
 		stopRotate();
