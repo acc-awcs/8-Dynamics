@@ -191,4 +191,10 @@
 			margin-bottom: 0px;
 		}
 	}
+
+	@media screen and (max-width: 400px) {
+		main {
+			padding: 10px;
+		}
+	}
 </style>
