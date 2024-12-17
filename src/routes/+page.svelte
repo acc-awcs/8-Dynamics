@@ -98,11 +98,6 @@
 	});
 </script>
 
-<svelte:head>
-	<title>8 Dynamics | All We Can Save</title>
-	<meta name="description" content="About this app" />
-</svelte:head>
-
 <svelte:window bind:innerWidth bind:innerHeight />
 
 <main onscroll={(e) => (scrollY = (e.target as HTMLElement)?.scrollTop)}>

@@ -1,52 +1,66 @@
 <script lang="ts">
+	import Arrow from '$lib/components/Arrow.svelte';
+	import DynamicSlider from '$lib/components/DynamicSlider.svelte';
 	import Logo from '$lib/components/Logo.svelte';
 	import SpiderChart from '$lib/components/SpiderChart.svelte';
-	import dynamics from '$lib/dynamics';
+	import dynamics, { rotateDynamic } from '$lib/dynamics';
 	import { onDestroy, onMount } from 'svelte';
 
 	const INTERVAL = 1500;
+	const BREAKPOINT = 900;
+	let innerWidth = $state(500);
 	let { data } = $props();
 	let highlight = $state(0);
 	let intervalId = $state<number>();
 	let chartWidth = $state(500);
 
-	function rotateSelected() {
-		let selected = highlight + 1;
-		if (selected >= dynamics.length) {
-			selected = 0;
+	function startRotate() {
+		if (innerWidth < BREAKPOINT) {
+			// If the screen is mobile width, we don't want to automatically highlight the dynamics
+			return;
 		}
-		// side-effect
-		highlight = selected;
+		if (!intervalId) {
+			intervalId = setInterval(() => {
+				highlight = rotateDynamic(highlight, 1);
+			}, INTERVAL);
+		}
+	}
+	function stopRotate() {
+		clearInterval(intervalId);
+		intervalId = undefined;
+	}
+
+	function onHover(select: number) {
+		highlight = select;
+		stopRotate();
 	}
 
 	onMount(() => {
-		if (!intervalId) {
-			intervalId = setInterval(rotateSelected, INTERVAL);
-		}
+		startRotate();
 	});
 	onDestroy(() => {
-		clearInterval(intervalId);
+		stopRotate();
 	});
 </script>
 
+<svelte:window bind:innerWidth />
 <div class="outer">
-	<div class="logo">
+	<header class="logo">
 		<Logo />
-	</div>
+	</header>
 	<main>
 		<h1 class="title">Your Results</h1>
 		<div class="chart" aria-hidden="true" bind:clientWidth={chartWidth}>
-			<SpiderChart answers={data.object} {highlight} {chartWidth} />
+			<SpiderChart answers={data.object} {highlight} {chartWidth} {onHover} onLeave={startRotate} />
 		</div>
 		<div class="results">
-			<ol>
-				{#each dynamics as dynamic, idx}
-					<li class:highlight={idx === highlight}>
-						{dynamic.full}
-						<span class="visually-hidden">Your answer: {data.answers[idx].value} out of 5</span>
-					</li>
-				{/each}
-			</ol>
+			<DynamicSlider
+				{highlight}
+				answers={data.answers.map((a) => a.value)}
+				{onHover}
+				onLeave={startRotate}
+			/>
+
 			<div class="next-steps">
 				<h2>Take a moment to pause and reflect.</h2>
 				<p>If you have a notebook on hand, jot down your responses.</p>
@@ -127,19 +141,12 @@
 	.actions {
 		margin-top: 1.2em;
 		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
 		gap: 1.5em;
-	}
-	ol {
-		padding: 0 1em;
-	}
-	ol li {
-		margin-bottom: 1em;
 	}
 	ul {
 		padding-inline-start: 20px;
-	}
-	li.highlight {
-		font-weight: bold;
 	}
 	.next-steps {
 		border: 1px solid var(--charcoal);
@@ -171,6 +178,10 @@
 	@media screen and (min-width: 900px) {
 		main {
 			display: grid;
+		}
+		.actions {
+			flex-wrap: nowrap;
+			justify-content: flex-start;
 		}
 	}
 </style>
