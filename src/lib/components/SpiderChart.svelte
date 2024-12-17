@@ -1,21 +1,31 @@
 <script lang="ts">
-	import dynamics from '$lib/dynamics';
 	import { line, scaleLinear } from 'd3';
-	let { answers }: { answers: Record<string, number> } = $props();
+	let {
+		answers,
+		highlight,
+		chartWidth,
+		onHover,
+		onLeave
+	}: {
+		answers: Record<string, number>;
+		highlight: number;
+		chartWidth: number;
+		onHover: CallableFunction;
+		onLeave: CallableFunction;
+	} = $props();
 
-	const BREAKPOINT = 800;
 	const features = $derived(Object.keys(answers));
-	let innerWidth = $state(500);
+
 	const config = $derived({
-		d: innerWidth > BREAKPOINT ? 500 : innerWidth - 240, // diameter of chart
-		p: 40, // padding each side to allow answer circles to render in svg container
-		labelD: 100, // dynamics label text diameter
+		d: chartWidth, // diameter of chart
+		labelRadius: 13, // radius of label circles
 		ticks: [1, 2, 3, 4, 5]
 	});
 
 	let radialScale = $derived(
 		scaleLinear()
-			.domain([0, 5])
+			// domain includes labels position
+			.domain([0, 6.5])
 			.range([0, config.d / 2])
 	);
 
@@ -29,7 +39,7 @@
 		// multiplying by -1 makes the math count clockwise
 		let x = Math.cos(angle) * radialScale(value) * -1;
 		let y = Math.sin(angle) * radialScale(value);
-		return { x: config.p + (config.d / 2 + x), y: config.p + (config.d / 2 - y) };
+		return { x: config.d / 2 + x, y: config.d / 2 - y };
 	}
 
 	// Method for drawing non-circle tick mark
@@ -49,7 +59,7 @@
 	}
 
 	// `radialTickLines` calculates the lines from center of the octagons to create the web
-	function radialTickLines() {
+	const radialTickLines = $derived.by(() => {
 		let lines: { outerX: number; outerY: number; labelX: number; labelY: number }[] = [];
 		for (var i = 0; i < features.length; i++) {
 			let pct = i / features.length;
@@ -64,7 +74,7 @@
 			});
 		}
 		return lines;
-	}
+	});
 
 	function drawAnswerShape(answers: Record<string, number>): string | null {
 		let coordinates: [number, number][] = [];
@@ -106,67 +116,46 @@
 			[]
 		)
 	);
-
-	// calculates the offset of each label's centerpoint from the center of the chart
-	let labels = $derived.by(() => {
-		const numPoints = features.length;
-		const points = [];
-		const angleStep = (2 * Math.PI) / numPoints;
-		// not using radialScale because we want a radius outside those bounds
-		const radius = config.d / 2 + config.p + config.labelD / 2;
-
-		for (let i = 0; i < numPoints; i++) {
-			const angle = i * angleStep;
-			const x = radius * Math.sin(angle);
-			// multiply y by -1 so it maps clockwise
-			const y = radius * Math.cos(angle) * -1;
-			points.push({
-				offsetX: x,
-				offsetY: y,
-				fullText: dynamics[i].full,
-				shortText: dynamics[i].short
-			});
-		}
-		return points;
-	});
 </script>
 
-<svelte:window bind:innerWidth />
-<div class="outer" style={`padding: ${config.labelD}px;`}>
-	<svg id="chart" width={config.d + 2 * config.p} height={config.d + 2 * config.p}>
+<div class="outer">
+	<svg id="chart" width={config.d} height={config.d} aria-hidden="true">
 		<path class="answer" stroke-width="3" opacity="0.8" d={drawAnswerShape(answers)} />
 		<g id="ticks">
 			{#each config.ticks as tick}
 				<!-- concentric octogons -->
 				<polygon points={tickToPolygon(tick)} />
 			{/each}
-			{#each radialTickLines() as f, idx}
-				<line
-					x1={config.p + config.d / 2}
-					y1={config.p + config.d / 2}
-					x2={f.outerX}
-					y2={f.outerY}
-				/>
+			{#each radialTickLines as f, idx}
+				<line x1={config.d / 2} y1={config.d / 2} x2={f.outerX} y2={f.outerY} />
 				<line class="dash" x1={f.outerX} y1={f.outerY} x2={f.labelX} y2={f.labelY} />
+				<g
+					class="label"
+					class:highlight={highlight === idx}
+					ontouchstart={() => onHover(idx)}
+					onmouseenter={() => onHover(idx)}
+					onmouseleave={() => onLeave()}
+					aria-hidden="true"
+				>
+					<circle
+						cx={f.labelX}
+						cy={f.labelY}
+						r={config.labelRadius}
+						stroke="black"
+						stroke-width="1"
+					>
+					</circle>
+					<text x={f.labelX} y={f.labelY}>{idx + 1}</text>
+				</g>
 			{/each}
 		</g>
 		<g id="answer">
 			{#each formattedAnswers as ans}
-				<circle cx={ans.xCoord} cy={ans.yCoord} r="13"></circle>
-				<text x={ans.xCoord - 5} y={ans.yCoord + 3}>{ans.answer}</text>
+				<circle cx={ans.xCoord} cy={ans.yCoord} r={config.labelRadius}></circle>
+				<text x={ans.xCoord} y={ans.yCoord}>{ans.answer}</text>
 			{/each}
 		</g>
 	</svg>
-	<div class="labels-container" style={`width: ${config.labelD}px; height: ${config.labelD}px;`}>
-		{#each labels as label, idx}
-			<div
-				class="dynamic"
-				style={`width: ${config.labelD}px; height: ${config.labelD}px; transform: translate(${label.offsetX}px, ${label.offsetY}px)`}
-			>
-				{label.shortText}
-			</div>
-		{/each}
-	</div>
 </div>
 
 <style>
@@ -199,24 +188,23 @@
 		fill: var(--charcoal);
 	}
 
-	/* LABELS */
-	.labels-container {
-		position: absolute;
-		display: block;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		transform-origin: center;
+	text {
+		/* all <text> elements live inside a circle */
+		transform: translate(-4px, 3px);
 	}
-	.dynamic {
-		position: absolute;
-		border-radius: 50%;
+	/* LABELS */
+	.label text {
+		fill: black;
 		text-align: center;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 1rem;
-		box-sizing: border-box;
-		color: var(--charcoal);
+	}
+	.label circle {
+		fill: var(--sky);
+		transition: fill 0.2s linear;
+	}
+	.label.highlight circle {
+		fill: black;
+	}
+	.label.highlight text {
+		fill: white;
 	}
 </style>

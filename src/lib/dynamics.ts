@@ -1,5 +1,5 @@
 // Ordering matters here
-export default [
+const dynamics = [
 	{
 		short: 'Motivation',
 		full: 'I hold deep motivations to foster a just, life-giving future.'
@@ -33,3 +33,17 @@ export default [
 		full: 'I have a sense of possibility, authentic power, and joy in the work.'
 	}
 ];
+
+export const rotateDynamic = (current: number, delta: number) => {
+	const selected = current + delta;
+	if (selected >= dynamics.length) {
+		// if we went over the number of dynamics, restart at 0
+		return 0;
+	} else if (selected < 0) {
+		// if we went under the first dynamic, set to last
+		return dynamics.length - 1;
+	}
+	return selected;
+};
+
+export default dynamics;
