@@ -1,29 +1,38 @@
-import sgMail from '@sendgrid/mail';
+import mailchimp from '@mailchimp/mailchimp_transactional';
+import { env } from '$env/dynamic/private';
+import dynamics from '$lib/dynamics';
+import type { MessageRecipient } from '@mailchimp/mailchimp_transactional';
 
-sgMail.setApiKey(import.meta.env.VITE_SENDGRID_API_KEY);
+const apiKey = env.MAILCHIMP_API_KEY;
+const client = mailchimp(apiKey ?? '');
 
 export async function POST({ request }) {
 	try {
-		const { email, username, results } = await request.json();
+		const { email, results } = await request.json();
+		// todo: include email validation
+		const features = Object.keys(results);
 
-		const msg = {
-			to: email,
-			from: 'info@allwecansave.earth',
+		const message = {
+			to: [{ email, type: 'to' } as MessageRecipient],
+			from_email: 'info@allwecansave.earth',
 			subject: '8 Dynamics - Your Results',
-			html: `
-        <h1>Hello, ${username}!</h1>
-        <p>Here are your results:</p>
-        <ul>
-          ${results.map((result) => `<li>${result}</li>`).join('')}
-        </ul>
-      `
+			html: `<h1>Your Results: </h1>
+				<div>
+				${dynamics.map((d, i) => `<span>${d.short}: ${results[features[i]]}</span>`)}
+				</div>
+			`
 		};
 
-		await sgMail.send(msg);
-
-		return new Response(JSON.stringify({ message: 'Email sent successfully!' }), { status: 200 });
-	} catch (error) {
-		console.error('Error sending email:', error);
-		return new Response(JSON.stringify({ error: 'Failed to send email' }), { status: 500 });
+		const response = await client.messages.send({ message });
+		if (Array.isArray(response)) {
+			const result = response[0];
+			if (result.status === 'sent') {
+				return new Response(JSON.stringify({ success: true }), { status: 200 });
+			}
+		} else {
+			throw new Error(response.message);
+		}
+	} catch (err) {
+		return new Response(JSON.stringify({ error: `Failed to send email. ${err}` }), { status: 500 });
 	}
 }

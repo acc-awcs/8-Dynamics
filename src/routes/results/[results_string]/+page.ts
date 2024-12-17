@@ -19,21 +19,26 @@ export function load({ params }: { params: { results_string: string } }) {
 	};
 }
 
-export async function _sendEmail() {
+export async function _sendEmail(
+	email: string,
+	results: Record<string, number>
+): Promise<{ success: boolean; message?: string }> {
 	try {
-		const response = await fetch('/api/send-results', {
+		const response = await fetch('/api/email', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({})
+			body: JSON.stringify({ email, results })
 		});
 
 		if (!response.ok) {
-			// handle error
+			throw new Error('Failed to send email');
+		} else {
+			return { success: true };
 		}
 	} catch (err) {
-		console.error('Error: could not send email');
+		return { success: false, message: err as string };
 	}
 }
 

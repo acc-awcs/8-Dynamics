@@ -24,8 +24,14 @@
 	</ol>
 	<div>Send a copy of your results:</div>
 	<form
-		on:submit={() => {
-			_sendEmail();
+		on:submit={async (e) => {
+			e.preventDefault();
+			const resp = await _sendEmail(email, data.object);
+			if (resp.success) {
+				alert('Email sent!');
+			} else {
+				alert("Sorry! Something went wrong and we couldn't send the email.");
+			}
 		}}
 	>
 		<input value={email} on:input={handleEmailChange} placeholder="Email address" />
