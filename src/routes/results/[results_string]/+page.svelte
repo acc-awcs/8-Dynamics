@@ -49,7 +49,10 @@
 		<Logo />
 	</header>
 	<main>
-		<h1 class="title">Your Results</h1>
+		<div>
+			<a href="/">← Retake the Quiz</a>
+			<h1 class="title">Your Results</h1>
+		</div>
 		<div class="chart" aria-hidden="true" bind:clientWidth={chartWidth}>
 			<SpiderChart answers={data.object} {highlight} {chartWidth} {onHover} onLeave={startRotate} />
 		</div>
@@ -97,6 +100,17 @@
 </div>
 
 <style>
+	a {
+		color: var(--charcoal);
+		font-weight: 600;
+		text-decoration: none;
+		font-style: normal;
+	}
+	a:hover,
+	a:active,
+	a:focus {
+		font-style: italic;
+	}
 	.outer {
 		background-color: var(--sky);
 		min-height: 100vh;
@@ -127,11 +141,12 @@
 		grid-column-end: span 1;
 		grid-row-start: 1;
 		grid-row-end: span 2;
+		margin-top: 40px;
 	}
 	h1 {
 		margin: 0;
 		padding: 0;
-		margin-top: 20px;
+		margin-top: 30px;
 		margin-bottom: 40px;
 	}
 	h2 {
@@ -181,7 +196,7 @@
 	@media screen and (min-width: 900px) {
 		main {
 			display: grid;
-			padding: 3rem;
+			padding: 25px 3rem;
 		}
 		.actions {
 			flex-wrap: nowrap;
