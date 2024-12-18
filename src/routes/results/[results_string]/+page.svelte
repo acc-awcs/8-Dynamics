@@ -102,14 +102,15 @@
 <style>
 	a {
 		color: var(--charcoal);
-		font-weight: 600;
+		font-weight: 300;
 		text-decoration: none;
 		font-style: normal;
+		z-index: 1;
 	}
 	a:hover,
 	a:active,
 	a:focus {
-		font-style: italic;
+		font-weight: 500;
 	}
 	.outer {
 		background-color: var(--sky);
