@@ -49,7 +49,7 @@
 		<Logo />
 	</header>
 	<main>
-		<div>
+		<div class="intro">
 			<a href="/">← Retake the Quiz</a>
 			<h1 class="title">Your Results</h1>
 		</div>
@@ -136,6 +136,10 @@
 		height: 120px;
 		position: relative;
 	}
+	.intro {
+		margin: 0px 20px;
+		margin-top: 20px;
+	}
 	.chart {
 		grid-column-start: 2;
 		grid-column-end: span 1;
@@ -204,6 +208,9 @@
 		}
 		h1 {
 			margin-bottom: 0px;
+		}
+		.intro {
+			margin: 0px;
 		}
 	}
 
