@@ -118,10 +118,9 @@
 		<div class="content">
 			<h1 class="title">8 Dynamics of Climate Engagement</h1>
 			<p>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lobortis mi arcu, sed iaculis
-				sapien sodales sit amet. Vestibulum magna urna, laoreet vitae ante et, lobortis laoreet
-				justo. Aliquam erat volutpat. Quisque commodo, ex non bibendum commodo, nulla nisi posuere
-				enim, ut hendrerit tellus tortor sed sem.
+				Below, you’ll find each of the 8 Dynamics of Climate Engagement with a sliding bar. Take a
+				moment to reflect on each statement and respond on a spectrum from 1 (“not true for me”) to
+				5 (“extremely true for me”). Consider what’s true for you, right now.
 			</p>
 			<a class="btn secondary" href="#section-0" onclick={(e) => scrollToSection(e, 0)}>Start</a>
 		</div>
@@ -189,7 +188,7 @@
 		font-size: 20px;
 		font-weight: 300;
 		line-height: 1.5;
-		margin-bottom: 40px;
+		margin-bottom: 50px;
 	}
 	.clouds-overlay-wrapper {
 		height: 100vh;
