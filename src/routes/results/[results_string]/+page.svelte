@@ -49,7 +49,10 @@
 		<Logo />
 	</header>
 	<main>
-		<h1 class="title">Your Results</h1>
+		<div class="intro">
+			<a href="/">← Return to Tool</a>
+			<h1 class="title">Your Results</h1>
+		</div>
 		<div class="chart" aria-hidden="true" bind:clientWidth={chartWidth}>
 			<SpiderChart answers={data.object} {highlight} {chartWidth} {onHover} onLeave={startRotate} />
 		</div>
@@ -97,6 +100,18 @@
 </div>
 
 <style>
+	a {
+		color: var(--charcoal);
+		font-weight: 300;
+		text-decoration: none;
+		font-style: normal;
+		z-index: 1;
+	}
+	a:hover,
+	a:active,
+	a:focus {
+		font-weight: 500;
+	}
 	.outer {
 		background-color: var(--sky);
 		min-height: 100vh;
@@ -122,16 +137,21 @@
 		height: 120px;
 		position: relative;
 	}
+	.intro {
+		margin: 0px 20px;
+		margin-top: 20px;
+	}
 	.chart {
 		grid-column-start: 2;
 		grid-column-end: span 1;
 		grid-row-start: 1;
 		grid-row-end: span 2;
+		margin-top: 40px;
 	}
 	h1 {
 		margin: 0;
 		padding: 0;
-		margin-top: 20px;
+		margin-top: 30px;
 		margin-bottom: 40px;
 	}
 	h2 {
@@ -181,7 +201,7 @@
 	@media screen and (min-width: 900px) {
 		main {
 			display: grid;
-			padding: 3rem;
+			padding: 25px 3rem;
 		}
 		.actions {
 			flex-wrap: nowrap;
@@ -189,6 +209,9 @@
 		}
 		h1 {
 			margin-bottom: 0px;
+		}
+		.intro {
+			margin: 0px;
 		}
 	}
 
