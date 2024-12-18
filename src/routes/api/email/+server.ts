@@ -14,7 +14,7 @@ export async function POST({ request }) {
 			template_content: [
 				{
 					name: 'results_link',
-					content: `https://dreamy-lokum-0293b5.netlify.app/results/${results_string}`
+					content: `Thank you for spending some time with the 8 Dynamics of Climate Engagement! Your results are <a href=${process.env.BASE_URL}/results/${results_string} style="color: #303326; text-decoration: underline">here</a>.`
 				}
 			],
 			message: {
