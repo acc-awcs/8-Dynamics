@@ -9,7 +9,7 @@
 	--blossom: #f9e4e7;
 
 	/* Some guideline widths - happy to adjust! */
-	--width-large: 900px;
+	--width-large: 820px;
 	--width-small: 610px;
 }
 
@@ -79,11 +79,12 @@ a:focus {
 }
 
 .btn {
-	font-size: 14px;
+	font-size: 18px;
 	font-weight: 600;
 	text-decoration: none;
 	border-radius: 50px;
 	padding: 16px 30px;
+	padding-bottom: 19px;
 	transition: all 0.1s linear;
 	/* fixes for discrepancies between .btn on <a> and <button> */
 	font-family: inherit;
