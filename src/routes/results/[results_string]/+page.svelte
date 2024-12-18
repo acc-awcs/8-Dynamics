@@ -86,16 +86,21 @@
 					<!-- TODO: add email action -->
 					<form
 						onsubmit={async (e) => {
-							e.preventDefault();
-							const resp = await _sendEmail(email, data.results_string);
+							const resp = await _sendEmail(email, data.result_string);
 							if (resp.success) {
 								alert('Email sent!');
 							} else {
 								alert("Sorry! Something went wrong and we couldn't send the email.");
 							}
+							email = '';
 						}}
 					>
-						<input value={email} oninput={handleEmailChange} placeholder="Email address" />
+						<input
+							value={email}
+							type="email"
+							oninput={handleEmailChange}
+							placeholder="Email address"
+						/>
 						<!-- TODO: email validation -->
 						<button class="btn secondary" type="submit">Email Your Results</button>
 						<a href="https://www.allwecansave.earth/dynamics-resources" class="btn secondary"

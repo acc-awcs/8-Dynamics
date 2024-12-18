@@ -33,10 +33,12 @@ export async function POST({ request }) {
 			const result = response[0];
 			if (result.status === 'sent') {
 				return new Response(JSON.stringify({ success: true }), { status: 200 });
+			} else {
+				throw new Error(`${result.reject_reason}`);
 			}
-		} else {
-			throw new Error(response.message);
 		}
+
+		throw new Error(response.message);
 	} catch (err) {
 		return new Response(JSON.stringify({ error: `Failed to send email. ${err}` }), { status: 500 });
 	}
