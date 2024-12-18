@@ -50,7 +50,7 @@
 	</header>
 	<main>
 		<div class="intro">
-			<a href="/">← Retake the Quiz</a>
+			<a href="/">← Return to Tool</a>
 			<h1 class="title">Your Results</h1>
 		</div>
 		<div class="chart" aria-hidden="true" bind:clientWidth={chartWidth}>
