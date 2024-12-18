@@ -79,8 +79,8 @@
 		width: 100%;
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
-		margin: 1.5rem 0;
+		gap: 10px;
+		margin: 30px 0;
 	}
 
 	.value {
@@ -88,13 +88,16 @@
 		text-align: center;
 		font-weight: 600;
 		color: var(--mustard);
+		margin-bottom: 30px;
+		position: relative;
+		right: 2px;
 	}
 
 	.slider {
 		display: flex;
 		align-items: center;
 		padding: 10px 16px;
-		margin: -14px -20px;
+		margin: -14px -16px;
 		border-radius: 28px;
 		transition: border 0.2s linear;
 		box-sizing: border-box;

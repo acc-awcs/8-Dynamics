@@ -130,10 +130,11 @@
 			bottom 0 right -100px,
 			bottom right;
 		background-size: 485px, 504px, 503px;
+		box-sizing: border-box;
 	}
 	main {
 		position: relative;
-		padding: 3rem;
+		padding: 1rem;
 		grid-template-columns: 1fr minmax(400px, 1fr);
 		grid-template-rows: min-content 1fr;
 		gap: 1em 3em;
@@ -151,6 +152,8 @@
 	h1 {
 		margin: 0;
 		padding: 0;
+		margin-top: 20px;
+		margin-bottom: 40px;
 	}
 	h2 {
 		font-family: 'adobe-garamond-pro', serif;
@@ -199,10 +202,20 @@
 	@media screen and (min-width: 900px) {
 		main {
 			display: grid;
+			padding: 3rem;
 		}
 		.actions {
 			flex-wrap: nowrap;
 			justify-content: flex-start;
+		}
+		h1 {
+			margin-bottom: 0px;
+		}
+	}
+
+	@media screen and (max-width: 400px) {
+		main {
+			padding: 10px;
 		}
 	}
 </style>

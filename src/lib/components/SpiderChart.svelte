@@ -18,7 +18,7 @@
 
 	const config = $derived({
 		d: chartWidth, // diameter of chart
-		labelRadius: 13, // radius of label circles
+		labelRadius: 14, // radius of label circles
 		ticks: [1, 2, 3, 4, 5]
 	});
 
@@ -137,21 +137,15 @@
 					onmouseleave={() => onLeave()}
 					aria-hidden="true"
 				>
-					<circle
-						cx={f.labelX}
-						cy={f.labelY}
-						r={config.labelRadius}
-						stroke="black"
-						stroke-width="1"
-					>
-					</circle>
+					<circle cx={f.labelX} cy={f.labelY} r={config.labelRadius}> </circle>
 					<text x={f.labelX} y={f.labelY}>{idx + 1}</text>
 				</g>
 			{/each}
 		</g>
 		<g id="answer">
 			{#each formattedAnswers as ans}
-				<circle cx={ans.xCoord} cy={ans.yCoord} r={config.labelRadius}></circle>
+				<!-- note: adding 1px to radius to make same size as charcoal circle (with stroke of 1px) -->
+				<circle cx={ans.xCoord} cy={ans.yCoord} r={config.labelRadius + 1}></circle>
 				<text x={ans.xCoord} y={ans.yCoord}>{ans.answer}</text>
 			{/each}
 		</g>
@@ -185,12 +179,14 @@
 		fill: var(--mustard);
 	}
 	#answer text {
-		fill: var(--charcoal);
+		fill: var(--cream);
 	}
 
 	text {
 		/* all <text> elements live inside a circle */
-		transform: translate(-4px, 3px);
+		transform: translate(-5px, 6px);
+		font-weight: 500;
+		font-size: 18px;
 	}
 	/* LABELS */
 	.label text {
@@ -200,9 +196,11 @@
 	.label circle {
 		fill: var(--sky);
 		transition: fill 0.2s linear;
+		stroke: var(--charcoal);
+		stroke-width: 1;
 	}
 	.label.highlight circle {
-		fill: black;
+		fill: var(--charcoal);
 	}
 	.label.highlight text {
 		fill: white;
