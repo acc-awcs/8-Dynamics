@@ -173,7 +173,8 @@
 
 	/* ANSWER SHAPES */
 	path.answer {
-		fill: var(--cream);
+		fill: var(--mustard);
+		opacity: 0.5;
 	}
 	#answer circle {
 		fill: var(--mustard);
