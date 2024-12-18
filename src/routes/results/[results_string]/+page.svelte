@@ -84,7 +84,7 @@
 					<form
 						onsubmit={async (e) => {
 							e.preventDefault();
-							const resp = await _sendEmail(email, data.object);
+							const resp = await _sendEmail(email, data.results_string);
 							if (resp.success) {
 								alert('Email sent!');
 							} else {
