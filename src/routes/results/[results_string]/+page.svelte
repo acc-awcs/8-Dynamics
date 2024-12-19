@@ -7,6 +7,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import ButtonLoader from '$lib/components/ButtonLoader.svelte';
+	import trackEvent from '$lib/custom-event';
 
 	const INTERVAL = 1500;
 	const BREAKPOINT = 900;
@@ -59,6 +60,7 @@
 
 	function openModal(): void {
 		showEmailModal = true;
+		trackEvent('click_send_email');
 	}
 
 	function closeModal(): void {
@@ -146,7 +148,7 @@
 	</header>
 	<main>
 		<div class="intro fade-in">
-			<a href="/">← Retake the Quiz</a>
+			<a onclick={() => trackEvent('click_retake_quiz')} href="/">← Retake the Quiz</a>
 			<h1 class="title">Your Results</h1>
 		</div>
 		<div class="chart fade-in delayed" aria-hidden="true" bind:clientWidth={chartWidth}>
