@@ -37,6 +37,7 @@
 	},
 	"dependencies": {
 		"@mailchimp/mailchimp_transactional": "^1.0.59",
+		"email-validator": "^2.0.4",
 		"trap-focus-svelte": "^1.1.0"
 	}
 }

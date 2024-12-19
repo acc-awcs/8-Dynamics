@@ -1,4 +1,5 @@
 import { error } from '@sveltejs/kit';
+import * as EmailValidator from 'email-validator';
 
 /** @type {import('./$types').PageLoad} */
 export function load({ params }: { params: { results_string: string } }) {
@@ -24,7 +25,7 @@ export function load({ params }: { params: { results_string: string } }) {
 export async function _sendEmail(
 	email: string,
 	results_string: string
-): Promise<{ success: boolean; message?: string }> {
+): Promise<{ success: boolean; message?: string; invalidFormat?: boolean }> {
 	try {
 		const response = await fetch('/api/email', {
 			method: 'POST',
@@ -35,12 +36,17 @@ export async function _sendEmail(
 		});
 
 		if (!response.ok) {
-			throw new Error('Failed to send email');
+			// bad request
+			if (response.status === 400) {
+				return { success: false, invalidFormat: true };
+			} else {
+				throw new Error('Failed to send email');
+			}
 		} else {
 			return { success: true };
 		}
-	} catch (err) {
-		return { success: false, message: err as string };
+	} catch (err: Error) {
+		return { success: false, message: err.message };
 	}
 }
 

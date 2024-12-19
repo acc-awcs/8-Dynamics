@@ -1,5 +1,6 @@
 import mailchimp from '@mailchimp/mailchimp_transactional';
 import { env } from '$env/dynamic/private';
+import * as EmailValidator from 'email-validator';
 
 const apiKey = env.MAILCHIMP_API_KEY;
 const client = mailchimp(apiKey ?? '');
@@ -7,7 +8,12 @@ const client = mailchimp(apiKey ?? '');
 export async function POST({ request }) {
 	try {
 		const { email, results_string } = await request.json();
-		// todo: include email validation
+		// check for valid email
+		if (!EmailValidator.validate(email)) {
+			return new Response(JSON.stringify({ error: `Invalid email` }), {
+				status: 400
+			});
+		}
 
 		const message = {
 			template_name: 'eight-dynamics',

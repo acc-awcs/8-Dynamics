@@ -21,7 +21,7 @@
 	let sendEmailLoading = $state<boolean>(false);
 	let sendEmailFinished = $state<boolean>(false);
 	let sendEmailSuccess = $state<boolean>(false);
-	let showNoEmailMessage = $state<boolean>(false);
+	let emailError = $state<string>('');
 
 	function startRotate() {
 		if (innerWidth < BREAKPOINT) {
@@ -62,6 +62,7 @@
 
 	function closeModal(): void {
 		email = '';
+		emailError = '';
 		sendEmailFinished = false;
 		showEmailModal = false;
 	}
@@ -75,27 +76,31 @@
 			<!-- Email form -->
 			<h1 class="title modal-title">Email your results</h1>
 			<p>Email yourself a link to this page so you can reference your results later.</p>
-			{#if showNoEmailMessage && email.length < 1}
-				<p class="error">Please enter an email address.</p>
+			{#if emailError.length > 0}
+				<p class="error">{emailError}</p>
 			{/if}
 			<form
 				onsubmit={async (e) => {
 					if (email === '') {
-						showNoEmailMessage = true;
+						emailError = 'Please enter an email address';
 					} else if (!sendEmailLoading) {
 						sendEmailLoading = true;
 						const resp = await _sendEmail(email, data.results_string);
 						sendEmailLoading = false;
-						sendEmailFinished = true;
-						sendEmailSuccess = resp.success;
-						email = '';
+						if (resp.invalidFormat) {
+							emailError = 'Please enter a valid email';
+						} else {
+							sendEmailFinished = true;
+							sendEmailSuccess = resp.success;
+							email = '';
+						}
 					}
 				}}
 			>
 				<label class="visually-hidden" for="email">Your email address</label>
 				<input
 					value={email}
-					type="email"
+					type="text"
 					oninput={handleEmailChange}
 					placeholder="Your email address"
 					id="email"
