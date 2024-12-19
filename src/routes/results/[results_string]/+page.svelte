@@ -60,7 +60,7 @@
 
 	function openModal(): void {
 		showEmailModal = true;
-		trackEvent('click_send_email');
+		trackEvent('click_email_prompt');
 	}
 
 	function closeModal(): void {
@@ -96,6 +96,7 @@
 							sendEmailFinished = true;
 							sendEmailSuccess = resp.success;
 							email = '';
+							trackEvent('click_email_send_success');
 						}
 					}
 				}}
