@@ -6,6 +6,7 @@
 	import { rotateDynamic } from '$lib/dynamics';
 	import { onDestroy, onMount } from 'svelte';
 	import Modal from '$lib/components/Modal.svelte';
+	import ButtonLoader from '$lib/components/ButtonLoader.svelte';
 
 	const INTERVAL = 1500;
 	const BREAKPOINT = 900;
@@ -109,7 +110,13 @@
 					<button class="btn secondary" type="button" onclick={() => (showEmailModal = false)}
 						>Cancel</button
 					>
-					<button class="btn primary" type="submit">Send</button>
+					<button class="btn primary" class:loading={sendEmailLoading} type="submit">
+						{#if sendEmailLoading}
+							<ButtonLoader />
+						{:else}
+							Send
+						{/if}
+					</button>
 				</div>
 			</form>
 		{:else if sendEmailSuccess === true}
