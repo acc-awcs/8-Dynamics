@@ -49,14 +49,14 @@
 		<Logo />
 	</header>
 	<main>
-		<div class="intro">
+		<div class="intro fade-in">
 			<a href="/">← Retake the Quiz</a>
 			<h1 class="title">Your Results</h1>
 		</div>
-		<div class="chart" aria-hidden="true" bind:clientWidth={chartWidth}>
+		<div class="chart fade-in delayed" aria-hidden="true" bind:clientWidth={chartWidth}>
 			<SpiderChart answers={data.object} {highlight} {chartWidth} {onHover} onLeave={startRotate} />
 		</div>
-		<div class="results">
+		<div class="results fade-in">
 			<DynamicSlider
 				{highlight}
 				answers={data.answers.map((a) => a.value)}
@@ -198,6 +198,30 @@
 	footer > a {
 		color: inherit;
 	}
+
+	.fade-in {
+		transition: all 2s linear;
+		opacity: 0;
+		transform: translateY(20px);
+		animation: fadeIn 2s ease 0s 1 forwards;
+	}
+
+	.delayed {
+		animation-delay: 0.5s;
+	}
+
+	@keyframes fadeIn {
+		0% {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+
+		100% {
+			opacity: 1;
+			transform: translateY(0px);
+		}
+	}
+
 	@media screen and (min-width: 900px) {
 		main {
 			display: grid;
