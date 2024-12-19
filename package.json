@@ -36,6 +36,7 @@
 		"vitest": "^2.0.4"
 	},
 	"dependencies": {
-		"@mailchimp/mailchimp_transactional": "^1.0.59"
+		"@mailchimp/mailchimp_transactional": "^1.0.59",
+		"trap-focus-svelte": "^1.1.0"
 	}
 }

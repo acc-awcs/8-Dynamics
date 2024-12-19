@@ -1,11 +1,11 @@
 <script lang="ts">
-	import Arrow from '$lib/components/Arrow.svelte';
 	import DynamicSlider from '$lib/components/DynamicSlider.svelte';
 	import Logo from '$lib/components/Logo.svelte';
 	import SpiderChart from '$lib/components/SpiderChart.svelte';
 	import { _sendEmail } from './+page';
-	import dynamics, { rotateDynamic } from '$lib/dynamics';
+	import { rotateDynamic } from '$lib/dynamics';
 	import { onDestroy, onMount } from 'svelte';
+	import Modal from '$lib/components/Modal.svelte';
 
 	const INTERVAL = 1500;
 	const BREAKPOINT = 900;
@@ -14,7 +14,14 @@
 	let highlight = $state(0);
 	let intervalId = $state<number>();
 	let chartWidth = $state(500);
+
+	// Email form & query state management
 	let email = $state('');
+	let showEmailModal = $state<boolean>(false);
+	let sendEmailLoading = $state<boolean>(false);
+	let sendEmailFinished = $state<boolean>(false);
+	let sendEmailSuccess = $state<boolean>(false);
+	let showNoEmailMessage = $state<boolean>(false);
 
 	function startRotate() {
 		if (innerWidth < BREAKPOINT) {
@@ -48,9 +55,79 @@
 		const input = evt.target as HTMLInputElement;
 		email = input.value;
 	}
+
+	function openModal(): void {
+		showEmailModal = true;
+	}
+
+	function closeModal(): void {
+		email = '';
+		sendEmailFinished = false;
+		showEmailModal = false;
+	}
 </script>
 
 <svelte:window bind:innerWidth />
+
+{#if showEmailModal}
+	<Modal handleClose={closeModal}>
+		{#if !sendEmailFinished}
+			<!-- Email form -->
+			<h1 class="title">Email your results</h1>
+			<p>Email yourself a link to this page so you can reference your results later.</p>
+			{#if showNoEmailMessage && email.length < 1}
+				<p class="error">Please enter an email address.</p>
+			{/if}
+			<form
+				onsubmit={async (e) => {
+					if (email === '') {
+						showNoEmailMessage = true;
+					} else if (!sendEmailLoading) {
+						sendEmailLoading = true;
+						const resp = await _sendEmail(email, data.results_string);
+						sendEmailLoading = false;
+						sendEmailFinished = true;
+						sendEmailSuccess = resp.success;
+						email = '';
+					}
+				}}
+			>
+				<label class="visually-hidden" for="email">Your email address</label>
+				<input
+					value={email}
+					type="email"
+					oninput={handleEmailChange}
+					placeholder="Your email address"
+					id="email"
+				/>
+				<div class="buttons">
+					<button class="btn secondary" type="button" onclick={() => (showEmailModal = false)}
+						>Cancel</button
+					>
+					<button class="btn primary" type="submit">Send</button>
+				</div>
+			</form>
+		{:else if sendEmailSuccess === true}
+			<!-- Success message -->
+			<h1 class="title">Email sent</h1>
+			<p>Your email is on it's way! Check your inbox for your results link.</p>
+			<div class="buttons done">
+				<button class="btn primary" onclick={closeModal}>Done</button>
+			</div>
+		{:else}
+			<!-- Error message -->
+			<h1 class="title">Oops!</h1>
+			<p>
+				Looks like something went wrong on our end and we couldn't send your email. Please try again
+				later.
+			</p>
+			<div class="buttons done">
+				<button class="btn primary" onclick={closeModal}>Done</button>
+			</div>
+		{/if}
+	</Modal>
+{/if}
+
 <div class="outer">
 	<header class="logo">
 		<Logo />
@@ -83,30 +160,10 @@
 					</li>
 				</ul>
 				<div class="actions">
-					<!-- TODO: add email action -->
-					<form
-						onsubmit={async (e) => {
-							const resp = await _sendEmail(email, data.result_string);
-							if (resp.success) {
-								alert('Email sent!');
-							} else {
-								alert("Sorry! Something went wrong and we couldn't send the email.");
-							}
-							email = '';
-						}}
+					<button class="btn secondary" onclick={openModal}>Email Your Results</button>
+					<a href="https://www.allwecansave.earth/dynamics-resources" class="btn secondary"
+						>Resources for Support</a
 					>
-						<input
-							value={email}
-							type="email"
-							oninput={handleEmailChange}
-							placeholder="Email address"
-						/>
-						<!-- TODO: email validation -->
-						<button class="btn secondary" type="submit">Email Your Results</button>
-						<a href="https://www.allwecansave.earth/dynamics-resources" class="btn secondary"
-							>Resources for Support</a
-						>
-					</form>
 				</div>
 			</div>
 		</div>
@@ -126,16 +183,16 @@
 </div>
 
 <style>
-	a {
+	.intro a {
 		color: var(--charcoal);
 		font-weight: 300;
 		text-decoration: none;
 		font-style: normal;
 		z-index: 1;
 	}
-	a:hover,
-	a:active,
-	a:focus {
+	.intro a:hover,
+	.intro a:active,
+	.intro a:focus {
 		font-weight: 500;
 	}
 	.outer {
@@ -223,6 +280,41 @@
 	}
 	footer > a {
 		color: inherit;
+	}
+
+	input {
+		padding: 16px 30px;
+		padding-bottom: 19px;
+		font-size: 18px;
+		font-family: 'General Grotesque', Helvetica, Arial, sans-serif;
+		font-weight: 300;
+		border: 1px solid rgba(0, 0, 0, 0.12);
+		transition: outline 0.2s linear;
+		width: 100%;
+		box-sizing: border-box;
+	}
+	input:focus {
+		outline: 4px solid var(--mustard);
+	}
+	.buttons {
+		width: 100%;
+		margin-top: 20px;
+		display: flex;
+		justify-content: center;
+		gap: 20px;
+	}
+
+	.buttons .btn {
+		width: 100%;
+	}
+
+	.buttons.done .btn {
+		margin-top: 10px;
+		width: 70%;
+	}
+
+	.error {
+		color: var(--rust);
 	}
 
 	.fade-in {
