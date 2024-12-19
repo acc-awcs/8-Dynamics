@@ -104,6 +104,10 @@ a:focus {
 	background-color: var(--cream);
 }
 
+.btn.primary.loading:hover {
+	background-color: var(--mustard);
+}
+
 .btn.secondary {
 	border: 1px solid var(--charcoal);
 	color: var(--charcoal);
