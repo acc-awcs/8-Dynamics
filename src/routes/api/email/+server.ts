@@ -8,6 +8,7 @@ const client = mailchimp(apiKey ?? '');
 export async function POST({ request }) {
 	try {
 		const { email, results_string } = await request.json();
+
 		// check for valid email
 		if (!EmailValidator.validate(email)) {
 			return new Response(JSON.stringify({ error: `Invalid email` }), {
@@ -25,12 +26,14 @@ export async function POST({ request }) {
 			],
 			message: {
 				from_email: 'info@allwecansave.earth',
+				from_name: 'The All We Can Save Project',
 				to: [
 					{
 						email: email,
 						name: ''
 					}
-				]
+				],
+				subject: 'Your 8 Dynamics Results'
 			}
 		};
 
