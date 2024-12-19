@@ -3,6 +3,7 @@
 	import DynamicSlider from '$lib/components/DynamicSlider.svelte';
 	import Logo from '$lib/components/Logo.svelte';
 	import SpiderChart from '$lib/components/SpiderChart.svelte';
+	import { _sendEmail } from './+page';
 	import dynamics, { rotateDynamic } from '$lib/dynamics';
 	import { onDestroy, onMount } from 'svelte';
 
@@ -13,6 +14,7 @@
 	let highlight = $state(0);
 	let intervalId = $state<number>();
 	let chartWidth = $state(500);
+	let email = $state('');
 
 	function startRotate() {
 		if (innerWidth < BREAKPOINT) {
@@ -41,6 +43,11 @@
 	onDestroy(() => {
 		stopRotate();
 	});
+
+	function handleEmailChange(evt: Event): void {
+		const input = evt.target as HTMLInputElement;
+		email = input.value;
+	}
 </script>
 
 <svelte:window bind:innerWidth />
@@ -77,10 +84,29 @@
 				</ul>
 				<div class="actions">
 					<!-- TODO: add email action -->
-					<button class="btn secondary">Email Your Results</button>
-					<a href="https://www.allwecansave.earth/dynamics-resources" class="btn secondary"
-						>Resources for Support</a
+					<form
+						onsubmit={async (e) => {
+							const resp = await _sendEmail(email, data.result_string);
+							if (resp.success) {
+								alert('Email sent!');
+							} else {
+								alert("Sorry! Something went wrong and we couldn't send the email.");
+							}
+							email = '';
+						}}
 					>
+						<input
+							value={email}
+							type="email"
+							oninput={handleEmailChange}
+							placeholder="Email address"
+						/>
+						<!-- TODO: email validation -->
+						<button class="btn secondary" type="submit">Email Your Results</button>
+						<a href="https://www.allwecansave.earth/dynamics-resources" class="btn secondary"
+							>Resources for Support</a
+						>
+					</form>
 				</div>
 			</div>
 		</div>

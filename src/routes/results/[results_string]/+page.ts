@@ -2,7 +2,8 @@ import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
 export function load({ params }: { params: { results_string: string } }) {
-	const matches = [...params.results_string.matchAll(new RegExp(/([a-h])([1-5])/gi))];
+	const { results_string } = params;
+	const matches = [...results_string.matchAll(new RegExp(/([a-h])([1-5])/gi))];
 	if (matches.length !== 8) {
 		error(404, 'invalid match string');
 	}
@@ -15,8 +16,32 @@ export function load({ params }: { params: { results_string: string } }) {
 		object: matches.reduce((prev: Record<string, number>, curr) => {
 			prev[curr[1].toUpperCase()] = parseInt(curr[2], 10);
 			return prev;
-		}, {})
+		}, {}),
+		results_string
 	};
+}
+
+export async function _sendEmail(
+	email: string,
+	results_string: string
+): Promise<{ success: boolean; message?: string }> {
+	try {
+		const response = await fetch('/api/email', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ email, results_string })
+		});
+
+		if (!response.ok) {
+			throw new Error('Failed to send email');
+		} else {
+			return { success: true };
+		}
+	} catch (err) {
+		return { success: false, message: err as string };
+	}
 }
 
 export const csr = true;
