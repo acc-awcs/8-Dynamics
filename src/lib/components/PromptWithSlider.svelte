@@ -1,4 +1,5 @@
 <script lang="ts">
+	import trackEvent from '$lib/custom-event';
 	import type { Section } from '$lib/types';
 
 	export let value: number;
@@ -50,7 +51,9 @@
 
 	{#if resultsLink}
 		<div class="finish">
-			<a class="btn secondary" href={resultsLink}>Finish</a>
+			<a class="btn secondary" onclick={() => trackEvent('click_finish')} href={resultsLink}>
+				Finish
+			</a>
 		</div>
 	{/if}
 </div>
