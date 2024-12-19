@@ -73,7 +73,7 @@
 	<Modal handleClose={closeModal}>
 		{#if !sendEmailFinished}
 			<!-- Email form -->
-			<h1 class="title">Email your results</h1>
+			<h1 class="title modal-title">Email your results</h1>
 			<p>Email yourself a link to this page so you can reference your results later.</p>
 			{#if showNoEmailMessage && email.length < 1}
 				<p class="error">Please enter an email address.</p>
@@ -315,6 +315,10 @@
 
 	.error {
 		color: var(--rust);
+	}
+
+	.modal-title {
+		margin-bottom: 20px;
 	}
 
 	.fade-in {
