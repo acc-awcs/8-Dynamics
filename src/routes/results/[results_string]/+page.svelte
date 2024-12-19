@@ -86,7 +86,7 @@
 					<!-- TODO: add email action -->
 					<form
 						onsubmit={async (e) => {
-							const resp = await _sendEmail(email, data.object);
+							const resp = await _sendEmail(email, data.result_string);
 							if (resp.success) {
 								alert('Email sent!');
 							} else {
