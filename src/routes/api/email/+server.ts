@@ -7,7 +7,6 @@ const client = mailchimp(apiKey ?? '');
 export async function POST({ request }) {
 	try {
 		const { email, results_string } = await request.json();
-		// todo: include email validation
 
 		const message = {
 			template_name: 'eight-dynamics',
@@ -19,12 +18,14 @@ export async function POST({ request }) {
 			],
 			message: {
 				from_email: 'info@allwecansave.earth',
+				from_name: 'The All We Can Save Project',
 				to: [
 					{
 						email: email,
 						name: ''
 					}
-				]
+				],
+				subject: 'Your 8 Dynamics Results'
 			}
 		};
 
