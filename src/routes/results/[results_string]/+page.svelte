@@ -122,7 +122,7 @@
 		{:else if sendEmailSuccess === true}
 			<!-- Success message -->
 			<h1 class="title">Email sent</h1>
-			<p>Your email is on it's way! Check your inbox for your results link.</p>
+			<p>Your email is on its way! Check your inbox for your results link.</p>
 			<div class="buttons done">
 				<button class="btn primary" onclick={closeModal}>Done</button>
 			</div>
